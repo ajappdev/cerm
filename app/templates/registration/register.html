@@ -1,0 +1,30 @@
+{% extends "auth/base.html" %}
+{% load i18n %}
+
+{% block page_content %}
+
+{{registration_errors}}
+
+<form action=""  method="post">
+    {% csrf_token %}
+    <div>
+        <label for="">{% trans "Username" %}</label>
+        {{ register_form.username }}
+    </div>
+    <div>
+        <label>{% trans "Email" %}</label>
+        {{ register_form.email }}
+    </div>
+    <div>
+        <label>{% trans "Password" %}</label>
+        {{ register_form.password1 }}
+    </div>
+    <div>
+        <label>{% trans "Confirm password" %}</label>
+        {{ register_form.password2 }}
+    </div>
+
+    <button type="submit">Valider</button>
+</form>
+
+{% endblock %}
