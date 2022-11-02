@@ -1,15 +1,31 @@
 # DJANGO DECLARATIONS
+from django.conf import settings
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
-
+from os import listdir, path, remove, system, rename
+from django.templatetags.static import static
+import pandas as pd
+import os
 # APP DECLARATIONS
 import app.models as am
 import app.forms as af
-
+import app.m01_pre_treatment as m01
 
 # DECLARING FONCTIONS
 def landing_page(request):
     template = 'blank.html'
+
+    dataset_name = "ds2.xls"
+    dataset_df = pd.read_excel(
+        os.path.join(settings.STATIC_ROOT, 'datasets/' + dataset_name))
+
+    pre_treatment = m01.PreTreatment(dataset_df)
+    pre_treatment.clean_dataset()
+    pre_treatment.get_columns_types()
+    pre_treatment.detail_column_types()
+    pre_treatment.remove_nans()
+    pre_treatment.homogeneous_loop()
+
     context = {}
     return render(request, template, context)
 
