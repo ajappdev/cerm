@@ -15,17 +15,11 @@ import app.m01_pre_treatment as m01
 def landing_page(request):
     template = 'blank.html'
 
-    dataset_name = "ds2.xls"
+    dataset_name = "ds4.xlsx"
     dataset_df = pd.read_excel(
         os.path.join(settings.STATIC_ROOT, 'datasets/' + dataset_name))
 
     pre_treatment = m01.PreTreatment(dataset_df)
-    pre_treatment.clean_dataset()
-    pre_treatment.get_columns_types()
-    pre_treatment.detail_column_types()
-    pre_treatment.remove_nans()
-    pre_treatment.homogeneous_loop()
-
     context = {}
     return render(request, template, context)
 
