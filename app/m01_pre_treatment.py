@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from random import choice
 from string import ascii_uppercase
+import re
 
 # Importing app modules
 import app.m00_common as m00
@@ -15,6 +16,7 @@ PD_DTYPES_TRANSLATOR = {
     'float64': 'amount',
     'timedelta[ns]': 'date'
 }
+
 class PreTreatment:
 
     def __init__(self, dataset_df: pd.DataFrame()):
@@ -31,7 +33,6 @@ class PreTreatment:
         self.detail_column_types()
         self.remove_nans()
         self.changed_unchanged_columns()
-        self.describe_date_columns()
 
     def clean_dataset(self):
         
@@ -54,10 +55,10 @@ class PreTreatment:
                  'column_type':self.dataset_df.dtypes.values})
         for index, row in col_types.iterrows():
             if PD_DTYPES_TRANSLATOR[str(row['column_type'])] == "date":
-                day_of_week_column_name = row['column_name']+"_"+self.other_random_str+"_day_of_week"
-                week_column_name = row['column_name']+"_"+self.other_random_str+"_week"
-                month_column_name = row['column_name']+"_"+self.other_random_str+"_month"
-                year_column_name = row['column_name']+"_"+self.other_random_str+"_year"
+                day_of_week_column_name = self.other_random_str + "_day_of_week" + "_"+ row['column_name']
+                week_column_name = self.other_random_str + "_week" + "_" + row['column_name']
+                month_column_name = self.other_random_str + "_month" + "_" + row['column_name']
+                year_column_name = self.other_random_str + "_year" + "_" + row['column_name']
                 self.dataset_df[month_column_name] = self.dataset_df[row['column_name']].dt.strftime('%Y-%m')
                 self.dataset_df[year_column_name] = self.dataset_df[row['column_name']].dt.year
                 self.dataset_df[week_column_name] = self.dataset_df[row['column_name']].dt.strftime('%Y-%U')
@@ -96,12 +97,6 @@ class PreTreatment:
             else:
                  self.dataset_columns[column].insert(0, "changed")
 
-    def describe_date_columns(self):
-        self.date_columns = {}
-        for k, v in self.dataset_columns.items():
-            if "date" in v:
-                self.date_columns.update({k:{}})
-                describe_date_column(self.dataset_df[k], k)
 
 # Declaring functions
 
@@ -110,11 +105,7 @@ def clean_string(column_name: str):
     column_name = column_name.replace("\n", " ")
     column_name = column_name.replace("\n", " ")
     column_name = column_name.replace("\n", " ")
-    return column_name
+    column_name = column_name.strip()
+    column_name = re.sub(' +', ' ', column_name)
 
-def describe_date_column(column: pd.Series, column_header: str):
-    df_column = pd.DataFrame({column_header:column.values})
-    min_value = min(df_column[column_header])
-    max_value = max(df_column[column_header])
-    covered_period = (max_value - min_value).days
-    print(covered_period)
+    return column_name

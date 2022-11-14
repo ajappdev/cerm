@@ -10,6 +10,7 @@ import os
 import app.models as am
 import app.forms as af
 import app.m01_pre_treatment as m01
+import app.m02_describe as m02
 
 # DECLARING FONCTIONS
 def landing_page(request):
@@ -20,6 +21,11 @@ def landing_page(request):
         os.path.join(settings.STATIC_ROOT, 'datasets/' + dataset_name))
 
     pre_treatment = m01.PreTreatment(dataset_df)
+    describe = m02.Describe(
+        pre_treatment.dataset_df,
+        pre_treatment.dataset_columns,
+        pre_treatment.random_str)
+
     context = {}
     return render(request, template, context)
 
