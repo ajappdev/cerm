@@ -11,20 +11,29 @@ import app.models as am
 import app.forms as af
 import app.m01_pre_treatment as m01
 import app.m02_describe as m02
+import app.m03_decide_plots as m03
 
 # DECLARING FONCTIONS
 def landing_page(request):
     template = 'blank.html'
 
-    dataset_name = "ds4.xlsx"
+    dataset_name = "ds1.xls"
     dataset_df = pd.read_excel(
         os.path.join(settings.STATIC_ROOT, 'datasets/' + dataset_name))
 
-    pre_treatment = m01.PreTreatment(dataset_df)
+    pre_treatment = m01.PreTreatment(
+        dataset_df)
     describe = m02.Describe(
         pre_treatment.dataset_df,
         pre_treatment.dataset_columns,
         pre_treatment.random_str)
+    decide = m03.DecidePlots(
+        describe.dataset_df,
+        describe.dataset_columns,
+        describe.date_columns,
+        describe.month_columns,
+        describe.week_columns,
+        describe.random_str)
 
     context = {}
     return render(request, template, context)
