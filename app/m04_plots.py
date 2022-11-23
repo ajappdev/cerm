@@ -6,13 +6,16 @@ class SimpleSumPlot:
                 column_one_name,
                 column_two_name,
                 column_three_name,
-                dataset_columns):
+                dataset_columns,
+                random_str: str
+                ):
             """
             """
             self.column_one_name = column_one_name
             self.column_two_name = column_two_name
             self.column_three_name = column_three_name
             self.dataset_columns = dataset_columns
+            self.random_str = random_str
 
         def is_convenient(self):
             """
@@ -21,7 +24,8 @@ class SimpleSumPlot:
                     self.column_two_name == "" and\
                         self.column_three_name == "":
                 if "amount" in self.dataset_columns[self.column_one_name]:
-                    return True
+                    if (self.random_str + "_year_") not in self.column_one_name:
+                        return True
 
             return False
 
@@ -33,13 +37,15 @@ class SimpleAvgPlot:
                 column_one_name,
                 column_two_name,
                 column_three_name,
-                dataset_columns):
+                dataset_columns,
+                random_str: str):
             """
             """
             self.column_one_name = column_one_name
             self.column_two_name = column_two_name
             self.column_three_name = column_three_name
             self.dataset_columns = dataset_columns
+            self.random_str = random_str
 
         def is_convenient(self):
             """
@@ -48,7 +54,8 @@ class SimpleAvgPlot:
                     self.column_two_name == "" and\
                         self.column_three_name == "":
                 if "amount" in self.dataset_columns[self.column_one_name]:
-                    return True
+                    if (self.random_str + "_year_") not in self.column_one_name:
+                        return True
 
             return False
 
@@ -60,13 +67,15 @@ class SimpleMinPlot:
                 column_one_name,
                 column_two_name,
                 column_three_name,
-                dataset_columns):
+                dataset_columns,
+                random_str: str):
             """
             """
             self.column_one_name = column_one_name
             self.column_two_name = column_two_name
             self.column_three_name = column_three_name
             self.dataset_columns = dataset_columns
+            self.random_str = random_str
 
         def is_convenient(self):
             """
@@ -75,7 +84,8 @@ class SimpleMinPlot:
                     self.column_two_name == "" and\
                         self.column_three_name == "":
                 if "amount" in self.dataset_columns[self.column_one_name]:
-                    return True
+                    if (self.random_str + "_year_") not in self.column_one_name:
+                        return True
 
             return False
 
@@ -87,13 +97,15 @@ class SimpleMaxPlot:
                 column_one_name,
                 column_two_name,
                 column_three_name,
-                dataset_columns):
+                dataset_columns,
+                random_str: str):
             """
             """
             self.column_one_name = column_one_name
             self.column_two_name = column_two_name
             self.column_three_name = column_three_name
             self.dataset_columns = dataset_columns
+            self.random_str = random_str
 
         def is_convenient(self):
             """
@@ -102,7 +114,8 @@ class SimpleMaxPlot:
                     self.column_two_name == "" and\
                         self.column_three_name == "":
                 if "amount" in self.dataset_columns[self.column_one_name]:
-                    return True
+                    if (self.random_str + "_year_") not in self.column_one_name:
+                        return True
 
             return False
 
@@ -114,13 +127,15 @@ class SumPerCategoryPlot:
                 column_one_name,
                 column_two_name,
                 column_three_name,
-                dataset_columns):
+                dataset_columns,
+                random_str: str):
             """
             """
             self.column_one_name = column_one_name
             self.column_two_name = column_two_name
             self.column_three_name = column_three_name
             self.dataset_columns = dataset_columns
+            self.random_str = random_str
 
         def is_convenient(self):
             """
@@ -129,7 +144,8 @@ class SumPerCategoryPlot:
                     self.column_two_name != "" and\
                         self.column_three_name == "":
                 if "category" in self.dataset_columns[self.column_one_name] and "amount" in self.dataset_columns[self.column_two_name]:
-                    return True
+                    if (self.random_str + "_year_") not in self.column_two_name:
+                        return True
             return False
 
 
@@ -140,13 +156,15 @@ class AvgPerCategoryPlot:
                 column_one_name,
                 column_two_name,
                 column_three_name,
-                dataset_columns):
+                dataset_columns,
+                random_str: str):
             """
             """
             self.column_one_name = column_one_name
             self.column_two_name = column_two_name
             self.column_three_name = column_three_name
             self.dataset_columns = dataset_columns
+            self.random_str = random_str
 
         def is_convenient(self):
             """
@@ -155,7 +173,8 @@ class AvgPerCategoryPlot:
                     self.column_two_name != "" and\
                         self.column_three_name == "":
                 if "category" in self.dataset_columns[self.column_one_name] and "amount" in self.dataset_columns[self.column_two_name]:
-                    return True
+                    if (self.random_str + "_year_") not in self.column_two_name:
+                        return True
             return False
 
 
@@ -166,13 +185,15 @@ class MinPerCategoryPlot:
                 column_one_name,
                 column_two_name,
                 column_three_name,
-                dataset_columns):
+                dataset_columns,
+                random_str: str):
             """
             """
             self.column_one_name = column_one_name
             self.column_two_name = column_two_name
             self.column_three_name = column_three_name
             self.dataset_columns = dataset_columns
+            self.random_str = random_str
 
         def is_convenient(self):
             """
@@ -181,7 +202,8 @@ class MinPerCategoryPlot:
                     self.column_two_name != "" and\
                         self.column_three_name == "":
                 if "category" in self.dataset_columns[self.column_one_name] and "amount" in self.dataset_columns[self.column_two_name]:
-                    return True
+                    if (self.random_str + "_year_") not in self.column_two_name:
+                        return True
             return False
 
 
@@ -192,13 +214,15 @@ class MaxPerCategoryPlot:
                 column_one_name,
                 column_two_name,
                 column_three_name,
-                dataset_columns):
+                dataset_columns,
+                random_str: str):
             """
             """
             self.column_one_name = column_one_name
             self.column_two_name = column_two_name
             self.column_three_name = column_three_name
             self.dataset_columns = dataset_columns
+            self.random_str = random_str
 
         def is_convenient(self):
             """
@@ -207,7 +231,8 @@ class MaxPerCategoryPlot:
                     self.column_two_name != "" and\
                         self.column_three_name == "":
                 if "category" in self.dataset_columns[self.column_one_name] and "amount" in self.dataset_columns[self.column_two_name]:
-                    return True
+                    if (self.random_str + "_year_") not in self.column_two_name:
+                        return True
             return False
 
 
@@ -218,13 +243,15 @@ class MinPerCategoryPlot:
                 column_one_name,
                 column_two_name,
                 column_three_name,
-                dataset_columns):
+                dataset_columns,
+                random_str: str):
             """
             """
             self.column_one_name = column_one_name
             self.column_two_name = column_two_name
             self.column_three_name = column_three_name
             self.dataset_columns = dataset_columns
+            self.random_str = random_str
 
         def is_convenient(self):
             """
@@ -233,7 +260,8 @@ class MinPerCategoryPlot:
                     self.column_two_name != "" and\
                         self.column_three_name == "":
                 if "category" in self.dataset_columns[self.column_one_name] and "amount" in self.dataset_columns[self.column_two_name]:
-                    return True
+                    if (self.random_str + "_year_") not in self.column_two_name:
+                        return True
             return False
 
 
