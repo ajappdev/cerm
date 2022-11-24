@@ -44,7 +44,7 @@ class DecidePlots:
         for x in range(len(columns)):
             for plot in m04.ONE_D_PLOTS_LIST:
                 tested_plot = plot(
-                    columns[x], "", "", self.dataset_columns)
+                    columns[x], "", "", self.dataset_columns, self.random_str)
                 if tested_plot.is_convenient():
                     self.decided_plots.append(
                         {tested_plot.__class__.__name__:[columns[x], "", ""]})
@@ -56,7 +56,7 @@ class DecidePlots:
                 if x != y:
                     for plot in m04.TWO_D_PLOTS_LIST:
                         tested_plot = plot(
-                            columns[x], columns[y], "", self.dataset_columns)
+                            columns[x], columns[y], "", self.dataset_columns, self.random_str)
                         if tested_plot.is_convenient():
                             self.decided_plots.append(
                                 {tested_plot.__class__.__name__:[columns[x], columns[y], ""]})
@@ -68,7 +68,7 @@ class DecidePlots:
                 if x != y:
                     for plot in m04.THREE_D_PLOTS_LIST:
                         tested_plot = plot(
-                            columns[x], columns[y], "", self.dataset_columns)
+                            columns[x], columns[y], "", self.dataset_columns, self.random_str)
                         if tested_plot.is_convenient():
                             self.decided_plots.append(
                                 [columns[x], "-----", columns[y], tested_plot])
