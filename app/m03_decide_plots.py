@@ -35,9 +35,6 @@ class DecidePlots:
         self.check_one_d_plots()
         self.check_two_d_plots()
         self.check_three_d_plots()
-
-        for x in self.decided_plots:
-            print(x)
         
     def check_one_d_plots(self):
         columns = list(self.dataset_columns.keys())

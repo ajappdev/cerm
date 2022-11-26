@@ -3,10 +3,10 @@ class SimpleSumPlot:
 
         def __init__(
                 self,
-                column_one_name,
-                column_two_name,
-                column_three_name,
-                dataset_columns,
+                column_one_name: str,
+                column_two_name: str,
+                column_three_name: str,
+                dataset_columns: dict,
                 random_str: str
                 ):
             """
@@ -16,6 +16,13 @@ class SimpleSumPlot:
             self.column_three_name = column_three_name
             self.dataset_columns = dataset_columns
             self.random_str = random_str
+            self.formulas = "sum_first"
+            self.title = ""
+            self.sub_title = ""
+            self.unit = ""
+            self.color = ""
+            self.content = ""
+            self.template = "widgets/simple-figure-widget.html"
 
         def is_convenient(self):
             """
@@ -34,10 +41,10 @@ class SimpleAvgPlot:
 
         def __init__(
                 self,
-                column_one_name,
-                column_two_name,
-                column_three_name,
-                dataset_columns,
+                column_one_name: str,
+                column_two_name: str,
+                column_three_name: str,
+                dataset_columns: dict,
                 random_str: str):
             """
             """
@@ -46,6 +53,13 @@ class SimpleAvgPlot:
             self.column_three_name = column_three_name
             self.dataset_columns = dataset_columns
             self.random_str = random_str
+            self.formulas = "avg_first"
+            self.title = ""
+            self.sub_title = ""
+            self.unit = ""
+            self.color = ""
+            self.content = ""
+            self.template = "widgets/simple-figure-widget.html"
 
         def is_convenient(self):
             """
@@ -64,10 +78,10 @@ class SimpleMinPlot:
 
         def __init__(
                 self,
-                column_one_name,
-                column_two_name,
-                column_three_name,
-                dataset_columns,
+                column_one_name: str,
+                column_two_name: str,
+                column_three_name: str,
+                dataset_columns: dict,
                 random_str: str):
             """
             """
@@ -76,6 +90,13 @@ class SimpleMinPlot:
             self.column_three_name = column_three_name
             self.dataset_columns = dataset_columns
             self.random_str = random_str
+            self.formulas = "min_first"
+            self.title = ""
+            self.sub_title = ""
+            self.unit = ""
+            self.color = ""
+            self.content = ""
+            self.template = "widgets/simple-figure-widget.html"
 
         def is_convenient(self):
             """
@@ -94,10 +115,10 @@ class SimpleMaxPlot:
 
         def __init__(
                 self,
-                column_one_name,
-                column_two_name,
-                column_three_name,
-                dataset_columns,
+                column_one_name: str,
+                column_two_name: str,
+                column_three_name: str,
+                dataset_columns: dict,
                 random_str: str):
             """
             """
@@ -106,6 +127,13 @@ class SimpleMaxPlot:
             self.column_three_name = column_three_name
             self.dataset_columns = dataset_columns
             self.random_str = random_str
+            self.formulas = "max_first"
+            self.title = ""
+            self.sub_title = ""
+            self.unit = ""
+            self.color = ""
+            self.content = ""
+            self.template = "widgets/simple-figure-widget.html"
 
         def is_convenient(self):
             """
@@ -124,10 +152,10 @@ class SumPerCategoryPlot:
 
         def __init__(
                 self,
-                column_one_name,
-                column_two_name,
-                column_three_name,
-                dataset_columns,
+                column_one_name: str,
+                column_two_name: str,
+                column_three_name: str,
+                dataset_columns: dict,
                 random_str: str):
             """
             """
@@ -136,6 +164,13 @@ class SumPerCategoryPlot:
             self.column_three_name = column_three_name
             self.dataset_columns = dataset_columns
             self.random_str = random_str
+            self.formulas = "sum_second_per_first"
+            self.title = ""
+            self.sub_title = ""
+            self.unit = ""
+            self.color = ""
+            self.content = ""
+            self.template = "widgets/simple-figure-widget.html"
 
         def is_convenient(self):
             """
@@ -153,10 +188,10 @@ class AvgPerCategoryPlot:
 
         def __init__(
                 self,
-                column_one_name,
-                column_two_name,
-                column_three_name,
-                dataset_columns,
+                column_one_name: str,
+                column_two_name: str,
+                column_three_name: str,
+                dataset_columns: dict,
                 random_str: str):
             """
             """
@@ -165,6 +200,13 @@ class AvgPerCategoryPlot:
             self.column_three_name = column_three_name
             self.dataset_columns = dataset_columns
             self.random_str = random_str
+            self.formulas = "avg_second_per_first"
+            self.title = ""
+            self.sub_title = ""
+            self.unit = ""
+            self.color = ""
+            self.content = ""
+            self.template = "widgets/simple-figure-widget.html"
 
         def is_convenient(self):
             """
@@ -182,10 +224,10 @@ class MinPerCategoryPlot:
 
         def __init__(
                 self,
-                column_one_name,
-                column_two_name,
-                column_three_name,
-                dataset_columns,
+                column_one_name: str,
+                column_two_name: str,
+                column_three_name: str,
+                dataset_columns: dict,
                 random_str: str):
             """
             """
@@ -194,7 +236,14 @@ class MinPerCategoryPlot:
             self.column_three_name = column_three_name
             self.dataset_columns = dataset_columns
             self.random_str = random_str
-
+            self.formulas = "min_second_per_first"
+            self.title = ""
+            self.sub_title = ""
+            self.unit = ""
+            self.color = ""
+            self.content = ""
+            self.template = "widgets/simple-figure-widget.html"
+            
         def is_convenient(self):
             """
             """
@@ -211,10 +260,10 @@ class MaxPerCategoryPlot:
 
         def __init__(
                 self,
-                column_one_name,
-                column_two_name,
-                column_three_name,
-                dataset_columns,
+                column_one_name: str,
+                column_two_name: str,
+                column_three_name: str,
+                dataset_columns: dict,
                 random_str: str):
             """
             """
@@ -223,6 +272,13 @@ class MaxPerCategoryPlot:
             self.column_three_name = column_three_name
             self.dataset_columns = dataset_columns
             self.random_str = random_str
+            self.formulas = "max_second_per_first"
+            self.title = ""
+            self.sub_title = ""
+            self.unit = ""
+            self.color = ""
+            self.content = ""
+            self.template = "widgets/simple-figure-widget.html"
 
         def is_convenient(self):
             """
@@ -240,10 +296,10 @@ class MinPerCategoryPlot:
 
         def __init__(
                 self,
-                column_one_name,
-                column_two_name,
-                column_three_name,
-                dataset_columns,
+                column_one_name: str,
+                column_two_name: str,
+                column_three_name: str,
+                dataset_columns: dict,
                 random_str: str):
             """
             """
@@ -252,6 +308,13 @@ class MinPerCategoryPlot:
             self.column_three_name = column_three_name
             self.dataset_columns = dataset_columns
             self.random_str = random_str
+            self.formulas = "min_second_per_first"
+            self.title = ""
+            self.sub_title = ""
+            self.unit = ""
+            self.color = ""
+            self.content = ""
+            self.template = "widgets/simple-figure-widget.html"
 
         def is_convenient(self):
             """
@@ -277,4 +340,4 @@ TWO_D_PLOTS_LIST = [
     MinPerCategoryPlot,
     MaxPerCategoryPlot
     ] 
-THREE_D_PLOTS_LIST = [] 
+THREE_D_PLOTS_LIST = []

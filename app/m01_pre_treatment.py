@@ -32,10 +32,10 @@ class PreTreatment:
         self.get_column_types()
         self.detail_column_types()
         self.remove_nans()
+        self.attribute_colors_to_columns()
         self.changed_unchanged_columns()
-
         print(self.dataset_columns)
-        
+
     def clean_dataset(self):
         """
         """
@@ -101,6 +101,12 @@ class PreTreatment:
                 self.dataset_df[k] = self.dataset_df[k].replace(
                     np.nan, self.random_str)
 
+    def attribute_colors_to_columns(self):
+        """
+        """
+        for column in self.dataset_df.columns:
+            self.dataset_columns[column].insert(0, random_hex_color())
+
     def changed_unchanged_columns(self):
         """
         """
@@ -109,7 +115,6 @@ class PreTreatment:
                  self.dataset_columns[column].insert(0, "unchanged")
             else:
                  self.dataset_columns[column].insert(0, "changed")
-
 
 # Declaring functions
 
@@ -124,3 +129,10 @@ def clean_string(column_name: str):
     column_name = re.sub(' +', ' ', column_name)
 
     return column_name
+
+def random_hex_color():
+    """
+    """
+    import random
+    r = lambda: random.randint(0,255)
+    return '#%02X%02X%02X' % (r(),r(),r())

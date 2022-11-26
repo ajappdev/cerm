@@ -4,11 +4,16 @@
 
 {% block page_content %}
 
+
 <div class="container">
     <div class="row">
-        <div class="col-lg-4 col-md-12 col-sm-12 mb-3">
-            {% include 'widgets/simple-figure-widget.html' with color='red' title='sqskdqs' sub_title='sqsdqdqdqdqsd' amount='10.32' %}
+        {% for plot in plots %}
+        <div class="plot_widget col-lg-4 col-md-12 col-sm-12 mb-4">
+            {% with template_name=plot.template %}
+                {% include ""|add:template_name with content=plot.content title=plot.title sub_title=plot.sub_title unit=plot.unit color=plot.color%}
+            {% endwith %}
         </div>
+        {% endfor %}
     </div>
 </div>
 

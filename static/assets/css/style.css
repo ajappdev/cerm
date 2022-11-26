@@ -12,7 +12,7 @@ body
 {
     height: 35px;
     width: 35px;
-    background: rgb(207 207 207);
+    background: rgb(237 228 228);
     position: absolute;
     top: 20px;
     right: 20px;
@@ -21,7 +21,7 @@ body
     font-weight: 600;
     border-radius: 5px;
     cursor: pointer;
-    transition: 0.5s;
+    transition: 0.3s;
     font-size: 1.5em;
     color: grey;
 }
@@ -31,6 +31,30 @@ body
 }
 .close_widget:hover
 {
-background-color: rgb(126 123 123);
-color:white;
+    background-color: rgb(126 123 123);
+    color:white;
+}
+.text-muted
+{
+    color: #9f9f9f!important
+}
+.em-7
+{
+    font-size:0.7em;
+}
+.em-8
+{
+    font-size:0.8em;
+}
+.em-9
+{
+    font-size:0.9em;
+}
+.em-11
+{
+    font-size:1.1em;
+}
+.em-12
+{
+    font-size:1.2em;
 }

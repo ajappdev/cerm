@@ -12,12 +12,13 @@ import app.forms as af
 import app.m01_pre_treatment as m01
 import app.m02_describe as m02
 import app.m03_decide_plots as m03
+import app.m05_draw as m05
 
 # DECLARING FONCTIONS
 def landing_page(request):
     template = 'blank.html'
 
-    dataset_name = "ds1.xls"
+    dataset_name = "ds4.xlsx"
     dataset_df = pd.read_excel(
         os.path.join(settings.STATIC_ROOT, 'datasets/' + dataset_name))
 
@@ -34,8 +35,13 @@ def landing_page(request):
         describe.month_columns,
         describe.week_columns,
         describe.random_str)
+    draw = m05.DrawPlots(
+        decide.dataset_df,
+        decide.decided_plots,
+        decide.dataset_columns,
+        decide.random_str)
 
-    context = {}
+    context = {"plots": draw.plots}
     return render(request, template, context)
 
 
