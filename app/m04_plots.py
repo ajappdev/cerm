@@ -22,6 +22,7 @@ class SimpleSumPlot:
             self.unit = ""
             self.color = ""
             self.content = ""
+            self.content_id = 0
             self.template = "widgets/simple-figure-widget.html"
 
         def is_convenient(self):
@@ -31,7 +32,7 @@ class SimpleSumPlot:
                     self.column_two_name == "" and\
                         self.column_three_name == "":
                 if "amount" in self.dataset_columns[self.column_one_name]:
-                    if (self.random_str + "_year_") not in self.column_one_name:
+                    if (self.random_str + "_year") not in self.column_one_name:
                         return True
 
             return False
@@ -59,6 +60,7 @@ class SimpleAvgPlot:
             self.unit = ""
             self.color = ""
             self.content = ""
+            self.content_id = 0
             self.template = "widgets/simple-figure-widget.html"
 
         def is_convenient(self):
@@ -68,7 +70,7 @@ class SimpleAvgPlot:
                     self.column_two_name == "" and\
                         self.column_three_name == "":
                 if "amount" in self.dataset_columns[self.column_one_name]:
-                    if (self.random_str + "_year_") not in self.column_one_name:
+                    if (self.random_str + "_year") not in self.column_one_name:
                         return True
 
             return False
@@ -96,6 +98,7 @@ class SimpleMinPlot:
             self.unit = ""
             self.color = ""
             self.content = ""
+            self.content_id = 0
             self.template = "widgets/simple-figure-widget.html"
 
         def is_convenient(self):
@@ -105,7 +108,7 @@ class SimpleMinPlot:
                     self.column_two_name == "" and\
                         self.column_three_name == "":
                 if "amount" in self.dataset_columns[self.column_one_name]:
-                    if (self.random_str + "_year_") not in self.column_one_name:
+                    if (self.random_str + "_year") not in self.column_one_name:
                         return True
 
             return False
@@ -133,6 +136,7 @@ class SimpleMaxPlot:
             self.unit = ""
             self.color = ""
             self.content = ""
+            self.content_id = 0
             self.template = "widgets/simple-figure-widget.html"
 
         def is_convenient(self):
@@ -142,13 +146,13 @@ class SimpleMaxPlot:
                     self.column_two_name == "" and\
                         self.column_three_name == "":
                 if "amount" in self.dataset_columns[self.column_one_name]:
-                    if (self.random_str + "_year_") not in self.column_one_name:
+                    if (self.random_str + "_year") not in self.column_one_name:
                         return True
 
             return False
 
 
-class SumPerCategoryPlot:
+class CategoryTablePlot:
 
         def __init__(
                 self,
@@ -164,13 +168,14 @@ class SumPerCategoryPlot:
             self.column_three_name = column_three_name
             self.dataset_columns = dataset_columns
             self.random_str = random_str
-            self.formulas = "sum_second_per_first"
+            self.formulas = "table_second_per_first"
             self.title = ""
             self.sub_title = ""
             self.unit = ""
             self.color = ""
             self.content = ""
-            self.template = "widgets/simple-figure-widget.html"
+            self.content_id = 0
+            self.template = "widgets/second-per-first-widget.html"
 
         def is_convenient(self):
             """
@@ -179,151 +184,7 @@ class SumPerCategoryPlot:
                     self.column_two_name != "" and\
                         self.column_three_name == "":
                 if "category" in self.dataset_columns[self.column_one_name] and "amount" in self.dataset_columns[self.column_two_name]:
-                    if (self.random_str + "_year_") not in self.column_two_name:
-                        return True
-            return False
-
-
-class AvgPerCategoryPlot:
-
-        def __init__(
-                self,
-                column_one_name: str,
-                column_two_name: str,
-                column_three_name: str,
-                dataset_columns: dict,
-                random_str: str):
-            """
-            """
-            self.column_one_name = column_one_name
-            self.column_two_name = column_two_name
-            self.column_three_name = column_three_name
-            self.dataset_columns = dataset_columns
-            self.random_str = random_str
-            self.formulas = "avg_second_per_first"
-            self.title = ""
-            self.sub_title = ""
-            self.unit = ""
-            self.color = ""
-            self.content = ""
-            self.template = "widgets/simple-figure-widget.html"
-
-        def is_convenient(self):
-            """
-            """
-            if self.column_one_name != "" and\
-                    self.column_two_name != "" and\
-                        self.column_three_name == "":
-                if "category" in self.dataset_columns[self.column_one_name] and "amount" in self.dataset_columns[self.column_two_name]:
-                    if (self.random_str + "_year_") not in self.column_two_name:
-                        return True
-            return False
-
-
-class MinPerCategoryPlot:
-
-        def __init__(
-                self,
-                column_one_name: str,
-                column_two_name: str,
-                column_three_name: str,
-                dataset_columns: dict,
-                random_str: str):
-            """
-            """
-            self.column_one_name = column_one_name
-            self.column_two_name = column_two_name
-            self.column_three_name = column_three_name
-            self.dataset_columns = dataset_columns
-            self.random_str = random_str
-            self.formulas = "min_second_per_first"
-            self.title = ""
-            self.sub_title = ""
-            self.unit = ""
-            self.color = ""
-            self.content = ""
-            self.template = "widgets/simple-figure-widget.html"
-            
-        def is_convenient(self):
-            """
-            """
-            if self.column_one_name != "" and\
-                    self.column_two_name != "" and\
-                        self.column_three_name == "":
-                if "category" in self.dataset_columns[self.column_one_name] and "amount" in self.dataset_columns[self.column_two_name]:
-                    if (self.random_str + "_year_") not in self.column_two_name:
-                        return True
-            return False
-
-
-class MaxPerCategoryPlot:
-
-        def __init__(
-                self,
-                column_one_name: str,
-                column_two_name: str,
-                column_three_name: str,
-                dataset_columns: dict,
-                random_str: str):
-            """
-            """
-            self.column_one_name = column_one_name
-            self.column_two_name = column_two_name
-            self.column_three_name = column_three_name
-            self.dataset_columns = dataset_columns
-            self.random_str = random_str
-            self.formulas = "max_second_per_first"
-            self.title = ""
-            self.sub_title = ""
-            self.unit = ""
-            self.color = ""
-            self.content = ""
-            self.template = "widgets/simple-figure-widget.html"
-
-        def is_convenient(self):
-            """
-            """
-            if self.column_one_name != "" and\
-                    self.column_two_name != "" and\
-                        self.column_three_name == "":
-                if "category" in self.dataset_columns[self.column_one_name] and "amount" in self.dataset_columns[self.column_two_name]:
-                    if (self.random_str + "_year_") not in self.column_two_name:
-                        return True
-            return False
-
-
-class MinPerCategoryPlot:
-
-        def __init__(
-                self,
-                column_one_name: str,
-                column_two_name: str,
-                column_three_name: str,
-                dataset_columns: dict,
-                random_str: str):
-            """
-            """
-            self.column_one_name = column_one_name
-            self.column_two_name = column_two_name
-            self.column_three_name = column_three_name
-            self.dataset_columns = dataset_columns
-            self.random_str = random_str
-            self.formulas = "min_second_per_first"
-            self.title = ""
-            self.sub_title = ""
-            self.unit = ""
-            self.color = ""
-            self.content = ""
-            self.template = "widgets/simple-figure-widget.html"
-
-        def is_convenient(self):
-            """
-            """
-            if self.column_one_name != "" and\
-                    self.column_two_name != "" and\
-                        self.column_three_name == "":
-                if "category" in self.dataset_columns[self.column_one_name] and "amount" in self.dataset_columns[self.column_two_name]:
-                    if (self.random_str + "_year_") not in self.column_two_name:
+                    if (self.random_str + "_year") not in self.column_two_name:
                         return True
             return False
 
@@ -335,9 +196,6 @@ ONE_D_PLOTS_LIST = [
     SimpleMaxPlot]
 
 TWO_D_PLOTS_LIST = [
-    SumPerCategoryPlot,
-    AvgPerCategoryPlot,
-    MinPerCategoryPlot,
-    MaxPerCategoryPlot
+    CategoryTablePlot
     ] 
 THREE_D_PLOTS_LIST = []

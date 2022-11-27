@@ -34,7 +34,6 @@ class PreTreatment:
         self.remove_nans()
         self.attribute_colors_to_columns()
         self.changed_unchanged_columns()
-        print(self.dataset_columns)
 
     def clean_dataset(self):
         """
@@ -60,10 +59,10 @@ class PreTreatment:
                  'column_type':self.dataset_df.dtypes.values})
         for index, row in col_types.iterrows():
             if PD_DTYPES_TRANSLATOR[str(row['column_type'])] == "date":
-                day_of_week_column_name = self.random_str + "_day_of_week" + "_"+ row['column_name']
-                week_column_name = self.random_str + "_week" + "_" + row['column_name']
-                month_column_name = self.random_str + "_month" + "_" + row['column_name']
-                year_column_name = self.random_str + "_year" + "_" + row['column_name']
+                day_of_week_column_name = self.random_str + "_day of week" + " ("+ row['column_name']+")"
+                week_column_name = self.random_str + "_week" + " ("+ row['column_name']+")"
+                month_column_name = self.random_str + "_month" + " ("+ row['column_name']+")"
+                year_column_name = self.random_str + "_year" + " ("+ row['column_name']+")"
                 self.dataset_df[month_column_name] = self.dataset_df[row['column_name']].dt.strftime('%Y-%m')
                 self.dataset_df[year_column_name] = self.dataset_df[row['column_name']].dt.year
                 self.dataset_df[week_column_name] = self.dataset_df[row['column_name']].dt.strftime('%Y-W%U')

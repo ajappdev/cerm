@@ -1,0 +1,45 @@
+{% load i18n %}
+{% load humanize %}
+<div class="plot_widget col-lg-12 col-md-12 col-sm-12 mb-4">
+<div class="widget-color-{{color}} widget_{{content_id}} second-per-first-widget card h-100">
+    <div class="card-body">
+        <h4 class="card-title">{{title}}</h4>
+        <h6 class="card-subtitle"><strong>{{sub_title}}</strong></h6>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    {% for col in content.columns %}
+                    {% if forloop.counter == 1 %}
+                        <th>
+                            {{col}}
+                        </th>
+                    {% else %}
+                        <th class="text-end">
+                            {{col}}
+                        </th>
+                    {% endif %}
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for index, row in content.iterrows %}
+                <tr>
+                  {% for cell in row %}
+                  {% if forloop.counter == 1 %}
+                    <td>
+                      {{cell}}
+                    </td>
+                    {% else %}
+                    <td class="text-end">
+                        {{cell|floatformat:2|intcomma}}
+                    </td>
+                    {% endif %}
+                  {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+      <div class="close_widget"><i class="fas fa-times"></i></div>
+    </div>
+</div>
+</div>

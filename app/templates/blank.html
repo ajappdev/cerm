@@ -8,15 +8,56 @@
 <div class="container">
     <div class="row">
         {% for plot in plots %}
-        <div class="plot_widget col-lg-4 col-md-12 col-sm-12 mb-4">
+        
             {% with template_name=plot.template %}
-                {% include ""|add:template_name with content=plot.content title=plot.title sub_title=plot.sub_title unit=plot.unit color=plot.color%}
+                {% include ""|add:template_name with content=plot.content title=plot.title sub_title=plot.sub_title unit=plot.unit color=plot.color content_id=plot.content_id%}
             {% endwith %}
-        </div>
+
         {% endfor %}
     </div>
 </div>
 
 
+<script
+  src="https://code.jquery.com/jquery-3.6.1.js"
+  integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
+  crossorigin="anonymous"></script>
+
+<script>
+
+$( document ).ready(function() {
+
+
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+/////////////////////////////AT LOAD//////////////////////
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+
+
+
+$(".plot_widget").each(function() {
+
+plot_color = $(this).find(".card").attr(
+    "class").split(" ")[0].split("-")[2]
+$(this).find(".card").css("border-left", "8px solid " + plot_color)
+
+});
+
+
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+////////////////////////CLICK EVENTS//////////////////////
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+$(document).on("click", ".close_widget", function() {
+$(this).closest(".plot_widget").remove()
+})
+
+
+
+});
+
+</script>
 
 {% endblock %}

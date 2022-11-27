@@ -21,60 +21,89 @@ class DrawPlots:
     def draw(self):
         """
         """
+        plot_index = 0
         for element in self.decided_plots:
+            plot_index += 1
             plot_class = getattr(m04, list(element.keys())[0])
+
+            first_col = element[list(element.keys())[0]][0]
+            second_col = element[list(element.keys())[0]][1]
+            third_col = element[list(element.keys())[0]][2]
+
             instance = plot_class(
-                element[list(element.keys())[0]][0],
-                element[list(element.keys())[0]][1],
-                element[list(element.keys())[0]][2],
+                first_col,
+                second_col,
+                third_col,
                 self.dataset_columns,
                 self.random_str)
 
             formulas = instance.formulas
             if formulas == "sum_first":
                 instance.title = "Total " + str(
-                    element[list(element.keys())[0]][0]).lower()
+                    first_col).lower()
                 instance.sub_title = "Sum of " + str(
-                    element[list(element.keys())[0]][0]).lower() + " column"
+                    first_col).lower() + " column"
                 instance.unit = "Unit"
                 instance.color = self.dataset_columns[
-                    element[list(element.keys())[0]][0]][1]
+                    first_col][1]
                 instance.content = self.dataset_df[
-                    element[list(element.keys())[0]][0]].sum()
+                    first_col].sum()
+                instance.content_id = plot_index
                 self.plots.append(instance)
 
             if formulas == "avg_first":
                 instance.title = "Average " + str(
-                    element[list(element.keys())[0]][0]).lower()
+                    first_col).lower()
                 instance.sub_title = "Mean of " + str(
-                    element[list(element.keys())[0]][0]).lower() + " column"
+                    first_col).lower() + " column"
                 instance.unit = "Unit"
                 instance.color = self.dataset_columns[
-                    element[list(element.keys())[0]][0]][1]
+                    first_col][1]
                 instance.content = self.dataset_df[
-                    element[list(element.keys())[0]][0]].mean()
+                    first_col].mean()
+                instance.content_id = plot_index
                 self.plots.append(instance)
 
             if formulas == "min_first":
                 instance.title = "Lowest " + str(
-                    element[list(element.keys())[0]][0]).lower()
+                    first_col).lower()
                 instance.sub_title = "Minium of " + str(
-                    element[list(element.keys())[0]][0]).lower() + " column"
+                    first_col).lower() + " column"
                 instance.unit = "Unit"
                 instance.color = self.dataset_columns[
-                    element[list(element.keys())[0]][0]][1]
+                    first_col][1]
                 instance.content = self.dataset_df[
-                    element[list(element.keys())[0]][0]].min()
+                    first_col].min()
+                instance.content_id = plot_index
                 self.plots.append(instance)
 
             if formulas == "max_first":
                 instance.title = "Highest " + str(
-                    element[list(element.keys())[0]][0]).lower()
+                    first_col).lower()
                 instance.sub_title = "Maximum of " + str(
-                    element[list(element.keys())[0]][0]).lower() + " column"
+                    first_col).lower() + " column"
                 instance.unit = "Unit"
                 instance.color = self.dataset_columns[
-                    element[list(element.keys())[0]][0]][1]
+                    first_col][1]
                 instance.content = self.dataset_df[
-                    element[list(element.keys())[0]][0]].max()
+                    first_col].max()
+                instance.content_id = plot_index
                 self.plots.append(instance)
+
+            if formulas == "table_second_per_first":
+
+                instance.title = self.remove_random_str(str(second_col)) + " per " + self.remove_random_str(str(first_col))
+                instance.unit = "Unit"
+                instance.color = self.dataset_columns[
+                    first_col][1]
+                instance.content = self.dataset_df.groupby(
+                    first_col)[second_col].agg(
+                        ['sum','mean', 'min', 'max']).reset_index()
+                instance.content.columns = instance.content.columns.str.replace(
+                    self.random_str + "_", '')
+                instance.content_id = plot_index
+                self.plots.append(instance)
+
+    def remove_random_str(self, name: str):
+        print(name, self.random_str)
+        return name.replace(self.random_str + "_", '').lower()

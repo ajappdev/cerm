@@ -35,6 +35,8 @@ def landing_page(request):
         describe.month_columns,
         describe.week_columns,
         describe.random_str)
+    for plot in decide.decided_plots:
+        print(plot)
     draw = m05.DrawPlots(
         decide.dataset_df,
         decide.decided_plots,
