@@ -1,6 +1,6 @@
 import pandas as pd
 import app.m04_plots as m04
-
+import app.m00_common as m00
 class DrawPlots:
 
     def __init__(
@@ -8,6 +8,7 @@ class DrawPlots:
             dataset_df: pd.DataFrame(),
             decided_plots: list,
             dataset_columns: dict,
+            category_columns: dict,
             random_str: str):
         """
         """
@@ -15,6 +16,7 @@ class DrawPlots:
         self.decided_plots = decided_plots
         self.random_str = random_str
         self.dataset_columns = dataset_columns
+        self.category_columns = category_columns
         self.plots = []
         self.draw()
 
@@ -35,6 +37,7 @@ class DrawPlots:
                 second_col,
                 third_col,
                 self.dataset_columns,
+                self.category_columns,
                 self.random_str)
 
             formulas = instance.formulas
@@ -90,7 +93,7 @@ class DrawPlots:
                 instance.content_id = plot_index
                 self.plots.append(instance)
 
-            if formulas == "table_second_per_first":
+            if formulas == "plot_second_per_first":
 
                 instance.title = self.remove_random_str(str(second_col)) + " per " + self.remove_random_str(str(first_col))
                 instance.unit = "Unit"
@@ -99,11 +102,37 @@ class DrawPlots:
                 instance.content = self.dataset_df.groupby(
                     first_col)[second_col].agg(
                         ['sum','mean', 'min', 'max']).reset_index()
+                instance.content = instance.content.sort_values(by=['sum'], ascending=False)
+                instance.content['display_column'] = ""
+                instance.content['sort_rank'] = 0
+                index_display = 0
+                for index, row in instance.content.iterrows():
+                    index_display += 1
+                    if index_display <= m00.OTHER_SECOND_PER_FIRST_THRESHOLD:
+                        instance.content.loc[index, 'display_column'] = instance.content.loc[index, str(first_col)]
+                    else:
+                        instance.content.loc[index, 'display_column'] = "Other"
+                    if str(instance.content.loc[index, 'display_column']).lower() == "other":
+                        instance.content.loc[index, 'sort_rank'] = 1
+                instance.content = instance.content.groupby(
+                    'display_column').agg({'sum':'sum', 'mean':'mean','min':'min','max':'max', 'sort_rank': 'sum'}).reset_index()
                 instance.content.columns = instance.content.columns.str.replace(
-                    self.random_str + "_", '')
+                    self.random_str + "_", '')      
                 instance.content_id = plot_index
+                instance.content = instance.content.sort_values(by=['sort_rank', 'sum'], ascending=[True, False])
+                instance.content = instance.content.drop('sort_rank', axis=1)
+                instance.content = instance.content.rename(columns = {'display_column':self.remove_random_str(str(first_col))})
+
+                total_sum_column = instance.content['sum'].sum()
+                if total_sum_column > 0:
+                    instance.content['perc_pie_chart'] = (instance.content['sum'] / total_sum_column)
+                else:
+                    instance.content['perc_pie_chart'] = 0
+                instance.pie_chart_labels = instance.content[
+                    self.remove_random_str(str(first_col))].tolist()
+                instance.pie_chart_values = instance.content['perc_pie_chart'].tolist()
+
                 self.plots.append(instance)
 
     def remove_random_str(self, name: str):
-        print(name, self.random_str)
         return name.replace(self.random_str + "_", '').lower()

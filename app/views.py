@@ -31,16 +31,16 @@ def landing_page(request):
     decide = m03.DecidePlots(
         describe.dataset_df,
         describe.dataset_columns,
+        describe.category_columns,
         describe.date_columns,
         describe.month_columns,
         describe.week_columns,
         describe.random_str)
-    for plot in decide.decided_plots:
-        print(plot)
     draw = m05.DrawPlots(
         decide.dataset_df,
         decide.decided_plots,
         decide.dataset_columns,
+        decide.category_columns,
         decide.random_str)
 
     context = {"plots": draw.plots}

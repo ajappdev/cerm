@@ -98,7 +98,7 @@ class PreTreatment:
                 self.dataset_df[k] = self.dataset_df[k].replace(np.nan, 0)
             if "object" in v:
                 self.dataset_df[k] = self.dataset_df[k].replace(
-                    np.nan, self.random_str)
+                    np.nan, "Other")
 
     def attribute_colors_to_columns(self):
         """

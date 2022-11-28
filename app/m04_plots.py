@@ -1,3 +1,4 @@
+import app.m00_common as m00
 
 class SimpleSumPlot:
 
@@ -7,6 +8,7 @@ class SimpleSumPlot:
                 column_two_name: str,
                 column_three_name: str,
                 dataset_columns: dict,
+                category_columns: dict,
                 random_str: str
                 ):
             """
@@ -23,6 +25,8 @@ class SimpleSumPlot:
             self.color = ""
             self.content = ""
             self.content_id = 0
+            self.pie_chart_labels = []
+            self.pie_chart_values = []
             self.template = "widgets/simple-figure-widget.html"
 
         def is_convenient(self):
@@ -46,6 +50,7 @@ class SimpleAvgPlot:
                 column_two_name: str,
                 column_three_name: str,
                 dataset_columns: dict,
+                category_columns: dict,
                 random_str: str):
             """
             """
@@ -61,6 +66,8 @@ class SimpleAvgPlot:
             self.color = ""
             self.content = ""
             self.content_id = 0
+            self.pie_chart_labels = []
+            self.pie_chart_values = []
             self.template = "widgets/simple-figure-widget.html"
 
         def is_convenient(self):
@@ -84,6 +91,7 @@ class SimpleMinPlot:
                 column_two_name: str,
                 column_three_name: str,
                 dataset_columns: dict,
+                category_columns: dict,
                 random_str: str):
             """
             """
@@ -99,6 +107,8 @@ class SimpleMinPlot:
             self.color = ""
             self.content = ""
             self.content_id = 0
+            self.pie_chart_labels = []
+            self.pie_chart_values = []
             self.template = "widgets/simple-figure-widget.html"
 
         def is_convenient(self):
@@ -122,6 +132,7 @@ class SimpleMaxPlot:
                 column_two_name: str,
                 column_three_name: str,
                 dataset_columns: dict,
+                category_columns: dict,
                 random_str: str):
             """
             """
@@ -137,6 +148,8 @@ class SimpleMaxPlot:
             self.color = ""
             self.content = ""
             self.content_id = 0
+            self.pie_chart_labels = []
+            self.pie_chart_values = []
             self.template = "widgets/simple-figure-widget.html"
 
         def is_convenient(self):
@@ -160,21 +173,25 @@ class CategoryTablePlot:
                 column_two_name: str,
                 column_three_name: str,
                 dataset_columns: dict,
+                category_columns: dict,
                 random_str: str):
             """
             """
             self.column_one_name = column_one_name
             self.column_two_name = column_two_name
             self.column_three_name = column_three_name
+            self.category_columns = category_columns
             self.dataset_columns = dataset_columns
             self.random_str = random_str
-            self.formulas = "table_second_per_first"
+            self.formulas = "plot_second_per_first"
             self.title = ""
             self.sub_title = ""
             self.unit = ""
             self.color = ""
             self.content = ""
             self.content_id = 0
+            self.pie_chart_labels = []
+            self.pie_chart_values = []
             self.template = "widgets/second-per-first-widget.html"
 
         def is_convenient(self):
@@ -185,7 +202,8 @@ class CategoryTablePlot:
                         self.column_three_name == "":
                 if "category" in self.dataset_columns[self.column_one_name] and "amount" in self.dataset_columns[self.column_two_name]:
                     if (self.random_str + "_year") not in self.column_two_name:
-                        return True
+                        if self.category_columns[self.column_one_name]['distinct_values'] >= m00.MIN_CATEGORIES_SECOND_PER_FIRST_THRESHOLD:
+                            return True
             return False
 
 

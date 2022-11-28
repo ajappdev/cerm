@@ -10,7 +10,7 @@
         {% for plot in plots %}
         
             {% with template_name=plot.template %}
-                {% include ""|add:template_name with content=plot.content title=plot.title sub_title=plot.sub_title unit=plot.unit color=plot.color content_id=plot.content_id%}
+                {% include ""|add:template_name with content=plot.content title=plot.title sub_title=plot.sub_title unit=plot.unit color=plot.color content_id=plot.content_id pie_chart_values=plot.pie_chart_values pie_chart_labels=plot.pie_chart_labels%}
             {% endwith %}
 
         {% endfor %}
@@ -22,7 +22,6 @@
   src="https://code.jquery.com/jquery-3.6.1.js"
   integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
   crossorigin="anonymous"></script>
-
 <script>
 
 $( document ).ready(function() {

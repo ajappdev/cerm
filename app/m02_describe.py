@@ -22,6 +22,16 @@ class Describe:
         self.describe_date_columns()
         self.describe_month_columns()
         self.describe_week_columns()
+        self.describe_category_columns()
+
+    def describe_category_columns(self):
+        """
+        """
+        self.category_columns = {}
+        for k, v in self.dataset_columns.items():
+            if "category" in v:
+                self.category_columns.update(
+                    {k:get_category_column_attributes(self.dataset_df[k], k)})
 
     def describe_date_columns(self):
         """
@@ -52,6 +62,15 @@ class Describe:
                 
 
 # Declare functons
+
+def get_category_column_attributes(column: pd.Series, column_header: str):
+    """
+    """
+    df_column = pd.DataFrame({column_header:column.values})
+    distinct_values = len(df_column[column_header].unique().tolist())
+    return {
+        "distinct_values": distinct_values
+        }
 
 def get_date_column_attributes(column: pd.Series, column_header: str):
     """
