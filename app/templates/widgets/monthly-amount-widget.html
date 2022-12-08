@@ -1,0 +1,56 @@
+{% load i18n %}
+{% load humanize %}
+{% load static %}
+<div class="plot_widget col-lg-12 col-md-12 col-sm-12 mb-4">
+<div class="widget-color-{{color}} widget_{{content_id}} second-per-first-widget card h-100">
+    <div class="card-body">
+        <h4 class="card-title">{{title}}</h4>
+        <h6 class="card-subtitle"><strong>{{sub_title}}</strong></h6>
+
+
+                <div class="chart chart-xs">
+                    <canvas id="doughnut_{{content_id}}"></canvas>
+                </div>
+
+      <div class="close_widget"><i class="fas fa-times"></i></div>
+    </div>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<script>
+
+            var pie_chart_labels = "{{pie_chart_labels|safe}}";
+            pie_chart_labels = pie_chart_labels.replace(/'/g, '')
+            pie_chart_labels = pie_chart_labels.replace("[","");
+            pie_chart_labels = pie_chart_labels.replace("]","");
+            pie_chart_labels = pie_chart_labels.split(', ');
+
+            var pie_chart_values = "{{pie_chart_values|safe}}";
+            pie_chart_values = pie_chart_values.replace("[","");
+            pie_chart_values = pie_chart_values.replace("]","");
+            pie_chart_values = pie_chart_values.split(', ');
+
+			// Doughnut chart
+			new Chart(document.getElementById("doughnut_{{content_id}}"), {
+				type: "bar",
+				data: {
+					labels: pie_chart_labels,
+					datasets: [{
+						data: pie_chart_values,
+                        backgroundColor: "{{color}}",
+						borderColor: "transparent"
+					}]
+				},
+				options: {
+					maintainAspectRatio: false,
+					cutoutPercentage: 65,
+					legend: {
+						display: false
+					}
+				}
+			});
+
+
+
+</script>

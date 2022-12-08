@@ -1,5 +1,6 @@
 {% load i18n %}
 {% load humanize %}
+{% load static %}
 <div class="plot_widget col-lg-12 col-md-12 col-sm-12 mb-4">
 <div class="widget-color-{{color}} widget_{{content_id}} second-per-first-widget card h-100">
     <div class="card-body">
@@ -15,7 +16,7 @@
                         <th>
                             {{col}}
                         </th>
-                    {% else %}
+                    {% elif forloop.counter < 6 %}
                         <th class="text-end">
                             {{col}}
                         </th>
@@ -35,10 +36,6 @@
                     <td class="text-end">
                         {{cell|floatformat:2|intcomma}}
                     </td>
-                {% else %}
-                <td class="text-end">
-                    {{cell}}
-                </td>
                 {% endif %}
                   {% endfor %}
                 </tr>
@@ -48,7 +45,7 @@
             </div>
             <div class="col-lg-4 col-md-12 col-sm-12 mb-4">
                 <div class="chart chart-xs">
-                    <canvas id="doughnut_{{content_id}}"></canvas>
+                    <canvas style="height: 200px;" id="doughnut_{{content_id}}"></canvas>
                 </div>
             </div>
         </div>
@@ -58,6 +55,7 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<script type="text/javascript" src="{% static 'assets/js/palette.js' %}"></script>
 <script>
 
             var pie_chart_labels = "{{pie_chart_labels|safe}}";
@@ -71,10 +69,6 @@
             pie_chart_values = pie_chart_values.replace("]","");
             pie_chart_values = pie_chart_values.split(', ');
 
-            for (var i = 0; i < pie_chart_values.length; i++ ) {
-                    color += letters[Math.floor(Math.random() * 16)];
-                }
-
 			// Doughnut chart
 			new Chart(document.getElementById("doughnut_{{content_id}}"), {
 				type: "doughnut",
@@ -82,11 +76,9 @@
 					labels: pie_chart_labels,
 					datasets: [{
 						data: pie_chart_values,
-						backgroundColor: [
-							"red",
-							"green",
-							"yellow"
-						],
+                        backgroundColor: palette('cb-Blues', pie_chart_values.length).map(function(hex) {
+                            return '#' + hex;
+                        }),
 						borderColor: "transparent"
 					}]
 				},

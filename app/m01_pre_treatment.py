@@ -85,7 +85,7 @@ class PreTreatment:
         """
         """
         for column in self.dataset_df.columns:
-            if len(self.dataset_df[column].unique().tolist()) <= m00.THRESHOLD_ACTOR_CATEGORY * len(self.dataset_df):
+            if len(self.dataset_df[column].unique().tolist()) <= m00.THRESHOLD_ACTOR_CATEGORY * len(self.dataset_df) and "amount" not in self.dataset_columns[column]:
                 self.dataset_columns[column].append("category")
             else:
                 self.dataset_columns[column].append("actor")

@@ -46,8 +46,9 @@ def landing_page(request):
         decide.decided_plots,
         decide.dataset_columns,
         decide.category_columns,
+        decide.month_columns,
         decide.random_str)
-
+    
     context = {"plots": draw.plots}
     return render(request, template, context)
 

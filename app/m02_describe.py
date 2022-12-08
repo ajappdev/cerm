@@ -47,7 +47,7 @@ class Describe:
         """
         self.month_columns = {}
         for k, v in self.dataset_columns.items():
-            if self.random_str + "_month_" in k:
+            if self.random_str + "_month" in k:
                 self.month_columns.update(
                     {k:get_month_column_attributes(self.dataset_df[k], k)})
 
@@ -56,7 +56,7 @@ class Describe:
         """
         self.week_columns = {}
         for k, v in self.dataset_columns.items():
-            if self.random_str + "_week_" in k:
+            if self.random_str + "_week" in k:
                 self.week_columns.update(
                     {k:get_week_column_attributes(self.dataset_df[k], k)})
                 

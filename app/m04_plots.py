@@ -9,6 +9,7 @@ class SimpleSumPlot:
                 column_three_name: str,
                 dataset_columns: dict,
                 category_columns: dict,
+                month_columns: dict,
                 random_str: str
                 ):
             """
@@ -51,6 +52,7 @@ class SimpleAvgPlot:
                 column_three_name: str,
                 dataset_columns: dict,
                 category_columns: dict,
+                month_columns: dict,
                 random_str: str):
             """
             """
@@ -92,6 +94,7 @@ class SimpleMinPlot:
                 column_three_name: str,
                 dataset_columns: dict,
                 category_columns: dict,
+                month_columns: dict,
                 random_str: str):
             """
             """
@@ -133,6 +136,7 @@ class SimpleMaxPlot:
                 column_three_name: str,
                 dataset_columns: dict,
                 category_columns: dict,
+                month_columns: dict,
                 random_str: str):
             """
             """
@@ -174,6 +178,7 @@ class CategoryTablePlot:
                 column_three_name: str,
                 dataset_columns: dict,
                 category_columns: dict,
+                month_columns: dict,
                 random_str: str):
             """
             """
@@ -207,6 +212,52 @@ class CategoryTablePlot:
             return False
 
 
+class MonthlyValuePlot:
+
+        def __init__(
+                self,
+                column_one_name: str,
+                column_two_name: str,
+                column_three_name: str,
+                dataset_columns: dict,
+                category_columns: dict,
+                month_columns: dict,
+                random_str: str):
+            """
+            """
+            self.column_one_name = column_one_name
+            self.column_two_name = column_two_name
+            self.column_three_name = column_three_name
+            self.category_columns = category_columns
+            self.month_columns = month_columns
+            self.dataset_columns = dataset_columns
+            self.random_str = random_str
+            self.formulas = "monthly_amount"
+            self.title = ""
+            self.sub_title = ""
+            self.unit = ""
+            self.color = ""
+            self.content = ""
+            self.content_id = 0
+            self.pie_chart_labels = []
+            self.pie_chart_values = []
+            self.template = "widgets/monthly-amount-widget.html"
+
+        def is_convenient(self):
+            """
+            """
+            if self.column_one_name != "" and\
+                    self.column_two_name != "" and\
+                        self.column_three_name == "":
+                if "amount" in self.dataset_columns[self.column_one_name]:
+                    if (self.random_str + "_month") in self.column_two_name:
+                        if (self.random_str + "_year") not in self.column_one_name:
+                            if self.month_columns[self.column_two_name]['covered_period'] >= m00.MIN_MONTHLY_PLOT_THRESHOLD:
+                                if self.month_columns[self.column_two_name]['perc_distinct_values'] >= m00.MIN_DISTINCT_VALUES_MONTHLY_PLOT_THRESHOLD:
+                                    return True
+            return False
+
+
 ONE_D_PLOTS_LIST = [
     SimpleSumPlot,
     SimpleAvgPlot,
@@ -214,6 +265,7 @@ ONE_D_PLOTS_LIST = [
     SimpleMaxPlot]
 
 TWO_D_PLOTS_LIST = [
-    CategoryTablePlot
+    CategoryTablePlot,
+    MonthlyValuePlot,
     ] 
 THREE_D_PLOTS_LIST = []

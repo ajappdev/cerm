@@ -9,6 +9,7 @@ class DrawPlots:
             decided_plots: list,
             dataset_columns: dict,
             category_columns: dict,
+            month_columns: dict,
             random_str: str):
         """
         """
@@ -17,6 +18,7 @@ class DrawPlots:
         self.random_str = random_str
         self.dataset_columns = dataset_columns
         self.category_columns = category_columns
+        self.month_columns = month_columns
         self.plots = []
         self.draw()
 
@@ -38,6 +40,7 @@ class DrawPlots:
                 third_col,
                 self.dataset_columns,
                 self.category_columns,
+                self.month_columns,
                 self.random_str)
 
             formulas = instance.formulas
@@ -132,6 +135,25 @@ class DrawPlots:
                     self.remove_random_str(str(first_col))].tolist()
                 instance.pie_chart_values = instance.content['perc_pie_chart'].tolist()
 
+                self.plots.append(instance)
+
+            if formulas == "monthly_amount":
+                instance.title = self.remove_random_str(str(first_col)) + " per month"
+                instance.unit = "Unit"
+                instance.color = self.dataset_columns[
+                    first_col][1]
+                instance.content = self.dataset_df.groupby(
+                    second_col)[first_col].agg(
+                        ['sum']).reset_index()
+                instance.content.columns = [self.remove_random_str(str(second_col)), self.remove_random_str(str(first_col))]
+                instance.content = instance.content.sort_values(by=[self.remove_random_str(str(second_col))], ascending=[False])
+                instance.content_id = plot_index
+                instance.pie_chart_labels = instance.content[
+                    self.remove_random_str(str(second_col))].tolist()
+                instance.pie_chart_values = instance.content[
+                    self.remove_random_str(str(first_col))].tolist()
+                instance.pie_chart_labels.reverse()
+                instance.pie_chart_values.reverse()
                 self.plots.append(instance)
 
     def remove_random_str(self, name: str):
