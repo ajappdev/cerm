@@ -7,6 +7,7 @@ import app.views as av
 
 urlpatterns = [
     path('', av.landing_page, name='landing_page'),
+    path('upload/', av.upload_page, name='upload_page'),
     path('auth/register/', av.register, name='register'),
 ]
 

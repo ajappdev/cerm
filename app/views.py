@@ -15,6 +15,11 @@ import app.m03_decide_plots as m03
 import app.m05_draw as m05
 
 # DECLARING FONCTIONS
+def upload_page(request):
+    template = 'upload-page.html'
+    context = {}
+    return render(request, template, context)
+
 def landing_page(request):
     template = 'blank.html'
 
