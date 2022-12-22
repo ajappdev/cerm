@@ -7,13 +7,7 @@
 
 <div class="container">
     <div class="row">
-        {% for plot in plots %}
-        
-            {% with template_name=plot.template %}
-                {% include ""|add:template_name with content=plot.content title=plot.title sub_title=plot.sub_title unit=plot.unit color=plot.color content_id=plot.content_id pie_chart_values=plot.pie_chart_values pie_chart_labels=plot.pie_chart_labels%}
-            {% endwith %}
-
-        {% endfor %}
+        sssssss
     </div>
 </div>
 
@@ -35,13 +29,6 @@ $( document ).ready(function() {
 
 
 
-$(".plot_widget").each(function() {
-
-plot_color = $(this).find(".card").attr(
-    "class").split(" ")[0].split("-")[2]
-$(this).find(".card").css("border-left", "8px solid " + plot_color)
-
-});
 
 
 //////////////////////////////////////////////////////////
@@ -49,10 +36,6 @@ $(this).find(".card").css("border-left", "8px solid " + plot_color)
 ////////////////////////CLICK EVENTS//////////////////////
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
-$(document).on("click", ".close_widget", function() {
-$(this).closest(".plot_widget").remove()
-})
-
 
 
 });

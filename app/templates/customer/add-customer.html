@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load humanize %}
+
+
+{% block page_content %}
+
+
+<div class="container">
+
+    <div id="div_identity">
+    <div class="row">
+        <div class="col-lg-4 col-12 col-md-12">
+        </div>
+        <div class="col-lg-4 col-12 col-md-12">
+            <div id="upload-div h_100">
+                <div id="upload-passport">
+                    {% include 'customer/widgets/upload-id.html' %}
+                </div>
+            </div>    
+        </div>
+        <div class="col-lg-4 col-12 col-md-12">
+        </div>
+        <div style="text-align:center;">
+            <button disabled id="upload_next" class="next_back_buttons btn btn-lg btn-success">{% trans "Suivant" %} <i class="fas fa-arrow-right"></i></button>
+        </div>
+    </div>
+    </div>
+    <div class="hidden" id="div_form">
+    <div class="row">
+        <div class="col-lg-4 col-12 col-md-12">
+        </div>
+        <div class="col-lg-4 col-12 col-md-12">
+
+            <div class="form-group mb-3">
+                <label for="customer_name" class="form-label">{% trans "Nom complet" %}</label>
+                <input type="text" class="form-control" id="customer_name" name="customer_name">
+            </div>
+            <div class="form-group mb-3">
+                <label for="customer_nationality" class="form-label">{% trans "Nationalité" %}</label>
+                <input type="text" class="form-control" id="customer_nationality" name="customer_nationality">
+            </div>
+            <div class="form-group mb-3">
+                <label for="customer_birth" class="form-label">{% trans "Date de naissance" %}</label>
+                <input type="text" class="datepicker form-control" id="customer_birth" name="customer_birth">
+            </div>
+            <div class="form-group mb-3">
+                <label for="customer_id" class="form-label">{% trans "Numéro du document" %}</label>
+                <input type="text" class="form-control" id="customer_id" name="customer_id">
+            </div>
+            <div class="form-group mb-3">
+                <label for="customer_expire" class="form-label">{% trans "Expiration du document" %}</label>
+                <input type="text" class="form-control datepicker" id="customer_expire" name="customer_expire">
+            </div>
+            <div class="form-group mb-3">
+                <label for="customer_phone" class="form-label">{% trans "Téléphone" %}</label>
+                <input type="text" class="form-control" id="customer_phone" name="customer_phone">
+            </div>
+            <div class="form-group mb-3">
+                <label for="customer_address" class="form-label">{% trans "Adresse" %}</label>
+                <input type="text" class="form-control" id="customer_address" name="customer_address">
+            </div>
+        </div>
+        <div class="col-lg-4 col-12 col-md-12">
+
+        </div>
+
+        <div class="mt-4" style="text-align:center;">
+            <button disabled class="next_back_buttons btn btn-lg btn-secondary"><i class="fas fa-arrow-left"></i> {% trans "Précédent" %}</button>
+            <button disabled class="next_back_buttons btn btn-lg btn-success">{% trans "Suivant" %} <i class="fas fa-arrow-right"></i></button>
+        </div>
+    </div>
+    </div>
+</div>
+
+
+<script
+  src="https://code.jquery.com/jquery-3.6.1.js"
+  integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
+  crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
+<script>
+    
+
+
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+/////////////////////////////AT LOAD//////////////////////
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+
+
+
+function check_file_upload()
+{
+    if (parseInt(id_card_uploaded) >= 1 && $("#customer_type_identity").val() != "") 
+    {
+        $("#upload_next").attr("disabled", false)
+    }else
+    {
+        $("#upload_next").attr("disabled", true)
+    }
+}
+
+$(function() {
+    $( ".datepicker" ).datepicker(
+        {
+        dateFormat: "yy-mm-dd"
+        });
+    });
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+////////////////////////CHANGE EVENTS//////////////////////
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+
+$(document).on("change", "#customer_type_identity", function() {
+
+    if (parseInt(id_card_uploaded) >= 1 && $("#customer_type_identity").val() != "") 
+    {
+        $("#upload_next").attr("disabled", false)
+    }else
+    {
+        $("#upload_next").attr("disabled", true)
+    }
+
+
+});
+
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+////////////////////////CLICK EVENTS//////////////////////
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+
+
+$(document).on("click", "#upload_next", function() {
+
+    if (parseInt(id_card_uploaded) >= 1 && $("#customer_type_identity").val() != "") 
+    {
+
+    data_dict = {
+        "action": "upload_identity_files_add_customer",
+    }
+
+    $.ajax({
+        headers: {
+            "X-CSRFToken": getCookie("csrftoken")
+        },
+        type: 'POST',
+        processData: false,
+        contentType: false,
+        url: "{% url 'ajax_calls' %}",
+        data: JSON.stringify(data_dict),
+        success: function(response) {
+            fill_form(response['id_reading'])
+        }
+    })
+    }
+
+});
+
+
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+////////////////////////FUNCTIONS/////////////////////////
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+
+function fill_form(content)
+{
+    $("#customer_name").val(content['surname'] + " " + content['name']);
+    $("#customer_nationality").val(content['nationality'] + " - " + content['country']);
+    $("#customer_id").val(content['document_number']);
+    $("#customer_birth").datepicker("setDate", content['birth_date']);
+    $("#customer_expire").datepicker("setDate", content['expiry_date']);
+
+
+    $("#div_form").show("");
+    $("#div_identity").hide("");
+}
+
+</script>
+
+
+{% endblock %}

@@ -58,3 +58,43 @@ body
 {
     font-size:1.2em;
 }
+
+.upload-area
+{
+    margin: auto !important;
+    margin-bottom: 50px !important;
+
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--clr-light);
+    color: var(--clr-black);
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.125rem;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .next_back_buttons
+  {
+    margin-right:10px;
+    margin-left:10px;
+  }
+
+  .hidden
+  {
+    display:none;
+  }
+  
+:root {
+    --clr-white: rgb(255, 255, 255);
+    --clr-black: rgb(0, 0, 0);
+    --clr-light: rgb(245, 248, 255);
+    --clr-light-gray: rgb(196, 195, 196);
+    --clr-blue: rgb(63, 134, 255);
+    --clr-light-blue: rgb(171, 202, 255);
+  }
