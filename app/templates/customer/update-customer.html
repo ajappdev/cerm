@@ -8,34 +8,22 @@
 
 <div class="container">
 
-    <div id="div_identity">
+
+    <div id="load_div" class="hidden" style="text-align:center;">
+        <img src="{% static 'assets/img/load.gif' %}">
+    </div>
+    <div id="div_form">
     <div class="row">
-        <div class="col-lg-4 col-12 col-md-12">
-        </div>
-        <div class="col-lg-4 col-12 col-md-12">
+        <div class="col-lg-3 col-12 col-md-12">
             <div id="upload-div h_100">
                 <div id="upload-passport">
                     {% include 'customer/widgets/upload-id.html' %}
                 </div>
             </div>    
         </div>
-        <div class="col-lg-4 col-12 col-md-12">
-        </div>
-        <div style="text-align:center;">
-            <button disabled id="upload_next" class="next_back_buttons btn btn-lg btn-success">{% trans "Suivant" %} <i class="fas fa-arrow-right"></i></button>
-        </div>
-    </div>
-    </div>
-    <div id="load_div" class="hidden" style="text-align:center;">
-        <img src="{% static 'assets/img/load.gif' %}">
-    </div>
-    <div class="hidden" id="div_form">
-    <div class="row">
-        <div class="col-lg-2 col-12 col-md-12">
-        </div>
-        <div class="col-lg-8 col-12 col-md-12">
+        <div class="col-lg-6 col-12 col-md-12">
             <div class="row">
-                <div class="col-lg-2 col-12 col-md-12">
+                <div class="col-lg-6 col-12 col-md-12">
                     <div class="form-group mb-3">
                         <label for="customer_sex" class="form-label">{% trans "Sexe" %}</label>
                         <select class="form-control" id="customer_sex" name="customer_sex">
@@ -45,19 +33,19 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-lg-4 col-12 col-md-12">
+                <div class="col-lg-6 col-12 col-md-12">
                     <div class="form-group mb-3">
                         <label for="customer_name" class="form-label">{% trans "Nom complet" %}</label>
-                        <input type="text" class="form-control" id="customer_name" name="customer_name">
+                        <input type="text" value="{{customer.complete_name}}" class="form-control" id="customer_name" name="customer_name">
                     </div>
                 </div>
-                <div class="col-lg-3 col-12 col-md-12">
+                <div class="col-lg-6 col-12 col-md-12">
                     <div class="form-group mb-3">
                         <label for="customer_nationality" class="form-label">{% trans "Nationalité" %}</label>
-                        <input type="text" class="form-control" id="customer_nationality" name="customer_nationality">
+                        <input type="text" value="{{customer.nationality}}" class="form-control" id="customer_nationality" name="customer_nationality">
                     </div>
                 </div>
-                <div class="col-lg-3 col-12 col-md-12">
+                <div class="col-lg-6 col-12 col-md-12">
                     <div class="form-group mb-3">
                         <label for="customer_birth" class="form-label">{% trans "Date de naissance" %}</label>
                         <input type="text" class="datepicker form-control" id="customer_birth" name="customer_birth">
@@ -65,14 +53,14 @@
                 </div>
                 <div class="col-lg-4 col-12 col-md-12">
                     <div class="form-group mb-3">
-                        <label for="customer_type" class="form-label">{% trans "Type de document" %}</label>
-                        <input disabled type="text" class="form-control" id="customer_type" name="customer_type">
+                        <label for="customer_type" class="form-label">{% trans "Type<br>de document" %}</label>
+                        <input value="{{customer.identity_type}}" disabled type="text" class="form-control" id="customer_type" name="customer_type">
                     </div>
                 </div>
                 <div class="col-lg-4 col-12 col-md-12">
                     <div class="form-group mb-3">
                         <label for="customer_id" class="form-label">{% trans "Numéro du document" %}</label>
-                        <input type="text" class="form-control" id="customer_id" name="customer_id">
+                        <input value="{{customer.identity_number}}" type="text" class="form-control" id="customer_id" name="customer_id">
                     </div>
                 </div>
                 <div class="col-lg-4 col-12 col-md-12">
@@ -81,36 +69,34 @@
                         <input type="text" class="form-control datepicker" id="customer_expire" name="customer_expire">
                     </div>
                 </div>
-                <div class="col-lg-3 col-12 col-md-12">
+                <div class="col-lg-6 col-12 col-md-12">
                     <div class="form-group mb-3">
                         <label for="customer_phone" class="form-label">{% trans "Téléphone" %}</label>
-                        <input type="text" class="form-control" id="customer_phone" name="customer_phone">
-                    </div>
-                </div>
-                <div class="col-lg-3 col-12 col-md-12">
-                    <div class="form-group mb-3">
-                        <label for="customer_email" class="form-label">{% trans "Email" %}</label>
-                        <input type="text" class="form-control" id="customer_email" name="customer_email">
+                        <input value="{{customer.phone}}" type="text" class="form-control" id="customer_phone" name="customer_phone">
                     </div>
                 </div>
                 <div class="col-lg-6 col-12 col-md-12">
                     <div class="form-group mb-3">
-                        <label for="customer_address" class="form-label">{% trans "Adresse" %}</label>
-                        <input type="text" class="form-control" id="customer_address" name="customer_address">
+                        <label for="customer_email" class="form-label">{% trans "Email" %}</label>
+                        <input value="{{customer.email}}" type="text" class="form-control" id="customer_email" name="customer_email">
                     </div>
                 </div>
                 <div class="col-lg-12 col-12 col-md-12">
                     <div class="form-group mb-3">
-                        <label for="customer_note" class="form-label">{% trans "Note" %}</label>
-                        <textarea style="resize:none;" type="text" class="form-control" id="customer_note" name="customer_note"></textarea>
+                        <label for="customer_address" class="form-label">{% trans "Adresse" %}</label>
+                        <input value="{{customer.address}}" type="text" class="form-control" id="customer_address" name="customer_address">
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-lg-2 col-12 col-md-12">
-
+        <div class="col-lg-3 col-12 col-md-12">
+            <div class="col-lg-12 col-12 col-md-12">
+                <div class="form-group mb-3">
+                    <label for="customer_note" class="form-label">{% trans "Note" %}</label>
+                    <textarea style="resize:none;" type="text" class="form-control" id="customer_note" name="customer_note"></textarea>
+                </div>
+            </div>
         </div>
-
         <div class="mt-4" style="text-align:center;">
             <button id="save_customer" class="next_back_buttons btn btn-lg btn-success"><i class="fas fa-save"></i> {% trans "Enregistrer" %}</button>
         </div>
@@ -136,8 +122,6 @@
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
 
-
-
 function check_file_upload()
 {
     if (parseInt(id_card_uploaded) >= 1 && $("#customer_type_identity").val() != "") 
@@ -154,7 +138,13 @@ $(function() {
         {
         dateFormat: "yy-mm-dd"
         });
+        $("#customer_birth").datepicker("setDate", "{{customer.date_of_birth|date:'Y-m-d'}}");
+        $("#customer_expire").datepicker("setDate", "{{customer.identity_expire_date|date:'Y-m-d'}}");
     });
+
+    alert("{{customer.sex}}")
+$("#customer_sex").val("{{customer.sex}}")
+
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
 ////////////////////////CHANGE EVENTS//////////////////////
@@ -222,7 +212,6 @@ if (validate_form() == true)
             "customer_phone": $("#customer_phone").val(),
             "customer_email": $("#customer_email").val(),
             "customer_note": $("#customer_note").val(),
-            "customer_sex": $("#customer_sex").val()
         }
         $("#load_div").show("")
         $("#div_form").hide("")

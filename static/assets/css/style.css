@@ -98,3 +98,54 @@ body {
     --clr-blue: rgb(63, 134, 255);
     --clr-light-blue: rgb(171, 202, 255);
   }
+  .separator
+  {
+      font-size: 0.3em;
+      color: #c7c7c7;
+      margin-right: 2px;
+      margin-left: 2px;
+  }
+  .mdb_danger
+  {
+    color:#dc4c64;
+  }
+  .mdb_danger_bg
+  {
+    background-color:#dc4c64;
+  }
+  .p1p1
+  {
+    font-size:1.1em;
+  }
+  .p1p2
+  {
+    font-size:1.2em;
+  }
+  .p1p3
+  {
+    font-size:1.3em;
+  }
+  .p1p4
+  {
+    font-size:1.4em;
+  }
+  .p1p5
+  {
+    font-size:1.5em;
+  }
+  .p1p6
+  {
+    font-size:1.6em;
+  }
+  .p1p7
+  {
+    font-size:1.7em;
+  }
+  .p1p8
+  {
+    font-size:1.8em;
+  }
+  .p1p9
+  {
+    font-size:1.9em;
+  }

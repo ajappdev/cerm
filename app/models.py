@@ -40,8 +40,9 @@ class Customer(models.Model):
     identity_number = models.CharField(
         max_length=100, null=False, blank=False)
     identity_expire_date = models.DateField(null=False, blank=False)
-    phone = models.CharField(max_length=100, null=True, blank=True)
-    date_of_birth = models.DateField()
+    phone = models.CharField(max_length=100, null=False, blank=False)
+    email = models.CharField(max_length=300, null=True, blank=True)
+    date_of_birth = models.DateField(null=False, blank=False)
     sex = models.CharField(
         max_length=300,
         null=False,
@@ -52,6 +53,8 @@ class Customer(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.complete_name
 
 class CustomerNotes(models.Model):
     """
@@ -61,3 +64,6 @@ class CustomerNotes(models.Model):
     note = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.customer + str(self.created_at)

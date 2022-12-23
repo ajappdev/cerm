@@ -34,6 +34,29 @@ def add_customer(request):
     return render(request, template, context)
 
 
+def update_customer(request, pk: int):
+    template = 'customer/update-customer.html'
+    customer = am.Customer.objects.get(id=pk)
+    context = {"customer": customer}
+    return render(request, template, context)
+
+
+def customers(request):
+    template = 'customer/index.html'
+
+    success_message = request.GET.get('success_message')
+    if success_message == "creation":
+        success_message = "Client créée avec succès"
+    elif success_message == "updated":
+        success_message = "Client modifié avec succès"
+    else:
+        success_message = ""
+
+    customers = am.Customer.objects.all()
+    context = {"customers": customers, "success_message": success_message}
+    return render(request, template, context)
+
+
 def register(request):
     register_form = af.RegisterForm()
     registration_errors = ""
@@ -82,5 +105,49 @@ def ajax_calls(request):
                 str(result['expiry_date']),
                 m00.DATE_PASSPORTS).strftime(m00.DATE_SHORT_LOCAL_WITH_SLASH)
             data_dict = {"id_reading": result}
+
+        if action == "delete_customer":
+            error = 0
+            error_text = ""
+            try:
+                am.Customer.objects.filter(
+                    id=int(received_json_data['customer_id'])).delete()
+            except Exception as e:
+                error_text = "EXCEPTION, AJAX_CALLS, DELETE_CUSTOMER, 1, " + str(e)
+                error = 1
+            data_dict = {"error": error, "error_text": error_text}
+
+        if action == "save_customer":
+            error = 0
+            error_text = ""
+            try:
+                new_customer = am.Customer()
+                new_customer.complete_name = received_json_data['customer_name']
+                new_customer.identity_type = received_json_data['customer_type']
+                new_customer.identity_number = received_json_data['customer_id']
+                new_customer.identity_expire_date = received_json_data['customer_expire']
+                new_customer.phone = received_json_data['customer_phone']
+                new_customer.email = received_json_data['customer_email']
+                new_customer.date_of_birth = received_json_data['customer_birth']
+                new_customer.nationality = received_json_data['customer_nationality']
+                new_customer.address = received_json_data['customer_address']
+                new_customer.sex = received_json_data['customer_sex']
+                new_customer.save()
+            except Exception as e:
+                error_text = "EXCEPTION, AJAX_CALLS, SAVE_CUSTOMER, 1, " + str(e)
+                error = 1
+            
+            if received_json_data['customer_note'] != "" and error == 0:
+                try:
+                    new_customer_note = am.CustomerNotes()
+                    new_customer_note.note = received_json_data['customer_note']
+                    new_customer_note.customer = new_customer
+                    new_customer_note.save()
+                except Exception as e:
+                    error_text = "EXCEPTION, AJAX_CALLS, SAVE_CUSTOMER_NOTE, 2, " + str(e)
+                    error = 1
+
+            data_dict = {"error": error, "error_text": error_text}
+
 
         return JsonResponse(data=data_dict, safe=False)
