@@ -21,6 +21,11 @@ import app.forms as af
 import app.m00_common as m00
 
 # DECLARING FONCTIONS
+def upload_page(request):
+    template = 'upload-page.html'
+    context = {}
+    return render(request, template, context)
+
 def landing_page(request):
     template = 'blank.html'
 

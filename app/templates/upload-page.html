@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+
+
+{% block page_content %}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6 col-md-12 col-sm-12">
+            <div class="form-group mb-3">
+                <label class="form-label" for="fileUpload">File</label>
+                <input class="form-control" type="file" id="fileUpload" name="fileUpload">
+            </div>
+            <div class="form-group mb-3">
+                <button onclick="s3upload()" type="button">Submit</button>
+            </div>
+            <progress max=”100” value=”0”></progress>
+        </div>
+    </div>
+</div>
+
+
+
+<script
+  src="https://code.jquery.com/jquery-3.6.1.js"
+  integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
+  crossorigin="anonymous"></script>
+
+<script
+    src="https://sdk.amazonaws.com/js/aws-sdk-2.1.24.min.js">
+</script>
+  
+<script>
+
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+//////////////DECLARING VARIABLES//////////////////////
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+
+
+//Bucket Configurations
+var bucketName = "ds2dajapp";
+var bucketRegion = 'us-east-1';
+var IdentityPoolId = 'us-east-1:996963e9-19b7-4981-9077-127c8dad8f05';
+
+ AWS.config.update({
+                region: bucketRegion,
+                credentials: new AWS.CognitoIdentityCredentials({
+                    IdentityPoolId: IdentityPoolId
+                })
+            });
+
+            var s3 = new AWS.S3({
+                signatureVersion: 'v4',
+                params: {Bucket: bucketName}
+        });
+
+$( document ).ready(function() {
+
+
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+/////////////////////////////AT LOAD//////////////////////
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+
+
+});
+
+
+
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+////////////////////////CLICK EVENTS//////////////////////
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+
+
+
+
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+////////////////////////FUNCTIONS//////////////////////
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+
+
+
+function s3upload() {
+   var files = document.getElementById('fileUpload').files;
+   if (files) 
+   {
+     var file = files[0];
+     var fileName = file.name;
+     var filePath = fileName;
+     var fileUrl = 'https://' + bucketRegion + '.amazonaws.com/'+filePath;
+     s3.upload({
+        forceIframeTransport : true,
+        Key: filePath,
+        Body: file,
+        ACL: 'public-read'
+        }, function(err, data) {
+        if(err) {
+            console.log(err)
+        }else
+        {
+        alert('Successfully Uploaded!');
+        var uploaded = parseInt((progress.loaded * 100) / progress.total);
+        $("progress").attr('value', uploaded);}
+        }).on('httpUploadProgress', function (progress) {
+
+      });
+   }
+};
+
+</script>
+
+{% endblock %}
