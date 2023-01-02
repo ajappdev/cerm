@@ -149,3 +149,18 @@ body {
   {
     font-size:1.9em;
   }
+  .customer_notes
+  {
+    font-size:0.8em;
+    color:#383737;
+  }
+  .customer_notes_title
+  {
+    background: #d9d9d9;
+    color: #545454;
+    padding: 10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    border-radius: 2px;
+    font-weight: 600;
+  }

@@ -42,7 +42,9 @@ def add_customer(request):
 def update_customer(request, pk: int):
     template = 'customer/update-customer.html'
     customer = am.Customer.objects.get(id=pk)
-    context = {"customer": customer}
+    customer_notes = am.CustomerNotes.objects.filter(
+        customer=customer).order_by("-created_at")
+    context = {"customer": customer, "customer_notes": customer_notes}
     return render(request, template, context)
 
 
@@ -100,6 +102,7 @@ def ajax_calls(request):
             detector = MrzDetector()
             reader = MrzReader()
             image = detector.read(file_path)
+            m00.process_id_card(file_path)
             cropped = detector.crop_area(image)
             result = reader.process(cropped)
             result['country'] = next(item for item in m00.COUNTRY_CODES if item["alpha-3"] == result['nationality'])['name']
@@ -125,31 +128,36 @@ def ajax_calls(request):
         if action == "save_customer":
             error = 0
             error_text = ""
-            try:
-                new_customer = am.Customer()
-                new_customer.complete_name = received_json_data['customer_name']
-                new_customer.identity_type = received_json_data['customer_type']
-                new_customer.identity_number = received_json_data['customer_id']
-                new_customer.identity_expire_date = received_json_data['customer_expire']
-                new_customer.phone = received_json_data['customer_phone']
-                new_customer.email = received_json_data['customer_email']
-                new_customer.date_of_birth = received_json_data['customer_birth']
-                new_customer.nationality = received_json_data['customer_nationality']
-                new_customer.address = received_json_data['customer_address']
-                new_customer.sex = received_json_data['customer_sex']
-                new_customer.save()
-            except Exception as e:
-                error_text = "EXCEPTION, AJAX_CALLS, SAVE_CUSTOMER, 1, " + str(e)
-                error = 1
             
+            if received_json_data['cus_id'] == 0:
+                customer = am.Customer()
+            else:
+                customer = am.Customer.objects.get(
+                    id=int(received_json_data['cus_id']))
+            try:
+                customer.complete_name = received_json_data['customer_name']
+                customer.identity_type = received_json_data['customer_type']
+                customer.identity_number = received_json_data['customer_id']
+                customer.identity_expire_date = received_json_data['customer_expire']
+                customer.phone = received_json_data['customer_phone']
+                customer.email = received_json_data['customer_email']
+                customer.date_of_birth = received_json_data['customer_birth']
+                customer.nationality = received_json_data['customer_nationality']
+                customer.address = received_json_data['customer_address']
+                customer.sex = received_json_data['customer_sex']
+                customer.save()
+            except Exception as e:
+                error_text = "EXCEPTION, AJAX_CALLS, SAVE_CUSTOMER, " + str(e)
+                error = 1
+
             if received_json_data['customer_note'] != "" and error == 0:
                 try:
                     new_customer_note = am.CustomerNotes()
                     new_customer_note.note = received_json_data['customer_note']
-                    new_customer_note.customer = new_customer
+                    new_customer_note.customer = customer
                     new_customer_note.save()
                 except Exception as e:
-                    error_text = "EXCEPTION, AJAX_CALLS, SAVE_CUSTOMER_NOTE, 2, " + str(e)
+                    error_text = "EXCEPTION, AJAX_CALLS, SAVE_CUSTOMER_NOTE, " + str(e)
                     error = 1
 
             data_dict = {"error": error, "error_text": error_text}
