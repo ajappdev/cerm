@@ -164,3 +164,17 @@ body {
     border-radius: 2px;
     font-weight: 600;
   }
+  .searched_customers
+{
+    background-color: white;
+    border: 1px solid #b8ebd2;
+    border-radius: 2px;
+    padding: 5px;
+    margin-top: 2px;
+	  display: none;
+    font-size:0.8em;
+}
+.id_customer_selectionne
+{
+	display: none;
+}

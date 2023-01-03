@@ -3,6 +3,8 @@ from django.conf import settings
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.templatetags.static import static
+from django.template.loader import render_to_string
+from django.db.models import Q
 
 # GENERAL DECLARATIONS
 import pandas as pd
@@ -13,7 +15,7 @@ from readmrz import MrzDetector, MrzReader
 import pytesseract
 from datetime import date, datetime
 
-pytesseract.pytesseract.tesseract_cmd = 'C:/Program Files/Tesseract-OCR/tesseract.exe'  # your path may be different
+pytesseract.pytesseract.tesseract_cmd = 'C:/Users/user/AppData/Local/Programs/Tesseract-OCR/tesseract.exe'  # your path may be different
 
 # APP DECLARATIONS
 import app.models as am
@@ -29,6 +31,12 @@ def upload_page(request):
 def landing_page(request):
     template = 'blank.html'
 
+    context = {}
+    return render(request, template, context)
+
+
+def add_transaction(request):
+    template = 'transaction/add-transaction.html'
     context = {}
     return render(request, template, context)
 
@@ -91,11 +99,26 @@ def register(request):
 
 
 def ajax_calls(request):
+
     if request.method == 'POST':
         received_json_data = json.loads(request.body)
         action = received_json_data['action']
 
-        if action == "upload_identity_files_add_customer":
+        if action == "get_my_customers":
+            initials = received_json_data['initials']
+            my_customers = am.Customer.objects.filter(
+                Q(complete_name__icontains=initials) |
+                Q(identity_number__icontains = initials))[: 15]
+            html = render_to_string(
+                        template_name="general-widgets/customers-list.html", 
+                        context={
+                            "my_customers": my_customers,
+                        }
+                    )
+            data_dict = {"html": html}
+
+
+        elif action == "upload_identity_files_add_customer":
 
             file_path = os.path.join(
                 settings.STATIC_ROOT, 'uploads/passport.jpg')
@@ -114,7 +137,7 @@ def ajax_calls(request):
                 m00.DATE_PASSPORTS).strftime(m00.DATE_SHORT_LOCAL_WITH_SLASH)
             data_dict = {"id_reading": result}
 
-        if action == "delete_customer":
+        elif action == "delete_customer":
             error = 0
             error_text = ""
             try:
@@ -125,7 +148,7 @@ def ajax_calls(request):
                 error = 1
             data_dict = {"error": error, "error_text": error_text}
 
-        if action == "save_customer":
+        elif action == "save_customer":
             error = 0
             error_text = ""
             

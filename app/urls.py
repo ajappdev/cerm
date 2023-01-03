@@ -7,6 +7,7 @@ import app.views as av
 
 urlpatterns = [
     path('', av.landing_page, name='landing_page'),
+    path('transactions/add', av.add_transaction, name='add_transaction'),
     path('customers/add', av.add_customer, name='add_customer'),
     path('customers/update/<int:pk>/', av.update_customer, name='update_customer'),
     path('customers/', av.customers, name='customers'),

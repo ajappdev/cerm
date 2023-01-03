@@ -1,0 +1,58 @@
+{% load i18n %}
+{% load humanize %}
+<div class="my_customers_container">
+    {% load i18n %}
+    {% load humanize %}
+    {% if my_customers|length == 0 %}
+            {% trans "Aucun client trouvé" %}
+    {% else %}
+            {% for customer in my_customers %}
+                <div class="lign_customer">
+                    <p class="nom_produit_customer">{{customer}}</p>
+                    <p class="id_customer">{{customer.id|safe}}</p>
+                    <p class="details_customer">{{customer.identity_type}} <span class="separator">&#11044;</span> {{customer.identity_number}} </p>
+                </div>   
+            {% endfor %}
+    {% endif %}
+    </div>
+    
+    <style>
+    
+    
+    .nom_produit_customer
+    {
+        font-weight: 600;
+        margin-bottom: 0;
+    }
+    .separator
+    {
+        font-size:0.5em !important;
+        margin-right: 5px;
+        margin-left: 5px;
+    }
+    .details_customer
+    {
+        font-size:0.9em;
+        color:grey;
+        margin-bottom: 0;
+    }
+    .lign_customer
+    {
+    
+        cursor:pointer;
+        padding: 10px;;
+    }
+    .lign_customer:hover
+    {
+        background:rgb(219, 229, 227);
+    }
+    .my_customers_container
+    {
+        max-height: 500px;
+        overflow-y: auto;
+    }
+    .id_customer, .customer_ppv, .customer_pph, .customer_expiration
+    {
+        display: none;
+    }
+    </style>
