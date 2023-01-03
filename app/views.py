@@ -16,7 +16,7 @@ import pytesseract
 from datetime import date, datetime
 
 pytesseract.pytesseract.tesseract_cmd = 'C:/Users/user/AppData/Local/Programs/Tesseract-OCR/tesseract.exe'  # your path may be different
-
+# pytesseract.pytesseract.tesseract_cmd = 'C:/Program Files/Tesseract-OCR/tesseract.exe'  # your path may be different
 # APP DECLARATIONS
 import app.models as am
 import app.forms as af
