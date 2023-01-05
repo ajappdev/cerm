@@ -92,7 +92,7 @@
         <div class="col-lg-3 col-12 col-md-12">
             <div class="customer_notes col-lg-12 col-12 col-md-12 mb-3">
                 <p class="customer_notes_title">{% trans "Notes sur le client" %}</p>
-                <div style="padding: 10px; max-height: 300px; overflow-y: auto;">
+                <div style="padding: 10px; max-height: 100px; overflow-y: auto;">
                     {% for note in customer_notes %}
                     <p class="customer_note"><strong>{{ note.created_at|date:"Y-m-d" }}</strong> : {{ note.note }}</p>
                     {% endfor %}
@@ -248,7 +248,7 @@ if (validate_form() == true)
                     $("#div_form").show("");
                 }else
                 {
-                    document.location.href = '/customers/?success_message=creation'
+                    document.location.href = '/customers/?success_message=updated'
                 }
             }
         })

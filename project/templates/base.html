@@ -3,7 +3,8 @@
 
 {% include 'head.html' %}
 
-<body>
+    
+    {% include 'navbar.html' %}
     {% csrf_token %}
     {% block page_content %}
     <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
@@ -19,6 +20,5 @@
 
 {% include 'scripts.html' %}
 
-</body>
 
 </html>

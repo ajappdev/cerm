@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load humanize %}
-
+{% load static %}
 
 {% block page_content %}
 
 
 <div class="container">
-    <div class="row">
+    <div id="div_form" class="row">
         <div class="col-lg-4 col-12 col-md-12">
         </div>
         <div class="col-lg-4 col-12 col-md-12">
@@ -20,7 +20,7 @@
                     <div class="searched_customers"></div>               
                 </div>
             </div>
-            <div class="col-lg-12 col-12 col-md-12">
+            <div class="col-lg-6 col-12 col-md-12">
                 <div class="form-group mb-3">
                     <label for="transaction_type" class="form-label">{% trans "Type de transaction" %}</label>
                     <select class="form-control" id="transaction_type" name="transaction_type">
@@ -30,7 +30,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-lg-12 col-12 col-md-12">
+            <div class="col-lg-6 col-12 col-md-12">
                 <div class="form-group mb-3">
                     <label for="transaction_currency" class="form-label">{% trans "Devise" %}</label>
                     <select class="form-control" id="transaction_currency" name="transaction_currency">
@@ -209,22 +209,34 @@
                     </select>
                 </div>
             </div>
-            <div class="col-lg-12 col-12 col-md-12">
+            <div class="col-lg-6 col-12 col-md-12">
                 <div class="form-group mb-3">
                     <label for="transaction_amount" class="form-label">{% trans "Montant" %}</label>
-                    <input type="number" class="form-control" id="transaction_amount" name="transaction_amount">
+                    <input type="number" class="form-control" id="transaction_amount" value="0.00" name="transaction_amount">
+                </div>
+            </div>
+            <div class="col-lg-6 col-12 col-md-12">
+                <div class="form-group mb-3">
+                    <label for="transaction_rate" class="form-label">{% trans "Taux" %}</label>
+                    <input type="number" class="form-control" id="transaction_rate" value="0.00" name="transaction_rate">
                 </div>
             </div>
             <div class="col-lg-12 col-12 col-md-12">
                 <div class="form-group mb-3">
-                    <label for="transaction_rate" class="form-label">{% trans "Montant" %}</label>
-                    <input type="number" class="form-control" id="transaction_rate" name="transaction_rate">
+                    <label for="transaction_note" class="form-label">{% trans "Note" %}</label>
+                    <textarea style="resize:none;" type="text" class="form-control" id="transaction_note" name="transaction_note"></textarea>
                 </div>
             </div>
         </div>
         </div>
         <div class="col-lg-4 col-12 col-md-12">
         </div>
+        <div class="mt-4" style="text-align:center;">
+            <button id="save_transaction" class="next_back_buttons btn btn-lg btn-success"><i class="fas fa-save"></i> {% trans "Enregistrer" %}</button>
+        </div>
+    </div>
+    <div id="load_div" class="hidden" style="text-align:center;">
+        <img src="{% static 'assets/img/load.gif' %}">
     </div>
     </div>
 </div>
@@ -246,7 +258,7 @@ $( document ).ready(function() {
 //////////////////////////////////////////////////////////
 
 
-
+var transaction_id = 0
 
 
 //////////////////////////////////////////////////////////
@@ -270,6 +282,63 @@ $(document).on('click', '.lign_customer', function () {
 
 });
 
+
+$(document).on("click", "#save_transaction", function() {
+
+if (validate_form() == true)
+    {
+        data_dict = {
+            "action": "save_transaction",
+            "transaction_type": $("#transaction_type").val(),
+            "transaction_note": $("#transaction_note").val(),
+            "transaction_currency": $("#transaction_currency").val(),
+            "transaction_amount": $("#transaction_amount").val(),
+            "transaction_id": transaction_id,
+            "transaction_rate": $("#transaction_rate").val(),
+            "customer_id": $(".id_customer_selectionne").text(),
+        }
+        $("#load_div").show("")
+        $("#div_form").hide("")
+
+        $.ajax({
+            headers: {
+                "X-CSRFToken": getCookie("csrftoken")
+            },
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            url: "{% url 'ajax_calls' %}",
+            data: JSON.stringify(data_dict),
+            success: function(response) {
+                if (response['error'] != "0")
+                {
+                    Swal.fire({
+                        icon: 'error',
+                        title: translate_js('Une erreur est survenue!', "FR"),
+                        position: 'center',
+                        showConfirmButton: false,
+                        text: response['error_text'],
+                    })
+                    $("#load_div").hide("")
+                    $("#div_form").show("")
+                }else
+                {
+                    document.location.href = '/transactions/?success_message=creation'
+                }
+            }
+        })
+    }else
+    {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            position: 'center',
+            showConfirmButton: false,
+            timer: 1500,
+            text: translate_js('Merci de remplire les champs indiquées en rouge !', "FR"),
+        })
+    }
+});
 
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
@@ -311,11 +380,40 @@ $(document).on('keyup', '.search_customer_input', function () {
 
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
-////////////////////////KEYUP EVENTS//////////////////////
+////////////////////////FUNCTIONS//////////////////////
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
 
-
+function validate_form()
+{
+    return_value = true
+    if ($(".id_customer_selectionne").text() == "")
+    {
+        $(".search_customer_input").css("background-color", "#ffc3c3");
+        return_value = false
+    }
+    if ($("#transaction_type").val() == "")
+    {
+        $("#transaction_type").css("background-color", "#ffc3c3")
+        return_value = false
+    }
+    if ($("#transaction_currency").val() == "")
+    {
+        $("#transaction_currency").css("background-color", "#ffc3c3")
+        return_value = false
+    }
+    if ($("#transaction_amount").val() <= 0)
+    {
+        $("#transaction_amount").css("background-color", "#ffc3c3")
+        return_value = false
+    }
+    if ($("#transaction_rate").val() <= 0)
+    {
+        $("#transaction_rate").css("background-color", "#ffc3c3")
+        return_value = false
+    }
+    return return_value
+}
 
 </script>
 

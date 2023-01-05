@@ -84,10 +84,23 @@ class Transaction(models.Model):
         choices=TRANSACTION_TYPES)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     currency = models.CharField(max_length=10, null=False, blank=False)
-    montant = models.FloatField()
+    amount = models.FloatField()
     rate = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return str(self.transaction_type) +  " - " + str(self.customer)
+
+
+class TransactionNotes(models.Model):
+    """
+    Here we store all the notes and remarks about a customer
+    """
+    transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE)
+    note = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.customer + str(self.created_at)

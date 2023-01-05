@@ -56,12 +56,21 @@ def update_customer(request, pk: int):
     return render(request, template, context)
 
 
+def update_transaction(request, pk: int):
+    template = 'transaction/update-transaction.html'
+    transaction = am.Transaction.objects.get(id=pk)
+    transactions_notes = am.TransactionNotes.objects.filter(
+        transaction=transaction).order_by("-created_at")
+    context = {"transaction": transaction, "transactions_notes": transactions_notes}
+    return render(request, template, context)
+
+
 def customers(request):
     template = 'customer/index.html'
 
     success_message = request.GET.get('success_message')
     if success_message == "creation":
-        success_message = "Client créée avec succès"
+        success_message = "Client créé avec succès"
     elif success_message == "updated":
         success_message = "Client modifié avec succès"
     else:
@@ -69,6 +78,22 @@ def customers(request):
 
     customers = am.Customer.objects.all()
     context = {"customers": customers, "success_message": success_message}
+    return render(request, template, context)
+
+
+def transactions(request):
+    template = 'transaction/index.html'
+
+    success_message = request.GET.get('success_message')
+    if success_message == "creation":
+        success_message = "Transaction créée avec succès"
+    elif success_message == "updated":
+        success_message = "Transaction modifiée avec succès"
+    else:
+        success_message = ""
+
+    transactions = am.Transaction.objects.all()
+    context = {"transactions": transactions, "success_message": success_message}
     return render(request, template, context)
 
 
@@ -146,6 +171,49 @@ def ajax_calls(request):
             except Exception as e:
                 error_text = "EXCEPTION, AJAX_CALLS, DELETE_CUSTOMER, 1, " + str(e)
                 error = 1
+            data_dict = {"error": error, "error_text": error_text}
+
+        elif action == "delete_transaction":
+            error = 0
+            error_text = ""
+            try:
+                am.Transaction.objects.filter(
+                    id=int(received_json_data['transaction_id'])).delete()
+            except Exception as e:
+                error_text = "EXCEPTION, AJAX_CALLS, DELETE_TRANSACTION, 1, " + str(e)
+                error = 1
+            data_dict = {"error": error, "error_text": error_text}
+
+        elif action == "save_transaction":
+            error = 0
+            error_text = ""
+            
+            if received_json_data['transaction_id'] == 0:
+                transaction = am.Transaction()
+            else:
+                transaction = am.Transaction.objects.get(
+                    id=int(received_json_data['transaction_id']))
+            try:
+                transaction.transaction_type = received_json_data['transaction_type']
+                transaction.currency = received_json_data['transaction_currency']
+                transaction.amount = received_json_data['transaction_amount']
+                transaction.rate = received_json_data['transaction_rate']
+                transaction.customer = am.Customer.objects.get(id=int(received_json_data['customer_id']))
+                transaction.save()
+            except Exception as e:
+                error_text = "EXCEPTION, AJAX_CALLS, SAVE_TRANSACTION, " + str(e)
+                error = 1
+
+            if received_json_data['transaction_note'] != "" and error == 0:
+                try:
+                    new_transacton_note = am.TransactionNotes()
+                    new_transacton_note.note = received_json_data['transaction_note']
+                    new_transacton_note.transaction = transaction
+                    new_transacton_note.save()
+                except Exception as e:
+                    error_text = "EXCEPTION, AJAX_CALLS, SAVE_TRANSACTION_NOTE, " + str(e)
+                    error = 1
+
             data_dict = {"error": error, "error_text": error_text}
 
         elif action == "save_customer":
