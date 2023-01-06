@@ -248,6 +248,9 @@ if (validate_form() == true)
                         showConfirmButton: false,
                         text: response['error_text'],
                     })
+                    $("#load_div").hide("")
+                    $("#div_form").show("")
+                    $("#div_identity").hide("");
                 }else
                 {
                     document.location.href = '/customers/?success_message=creation'

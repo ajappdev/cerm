@@ -7,43 +7,51 @@
 
 <div class="container">
     <div class="mb-3 d-grid gap-2 d-md-flex justify-content-md-end">
-        <a href="{% url 'add_customer' %}" class="btn btn-success" type="button"><i style="margin-right:5px;" class="fas fa-add"></i> {% trans "Ajouter client" %}</a>
+        <a href="{% url 'add_transaction' %}" class="btn btn-success" type="button"><i style="margin-right:5px;" class="fas fa-add"></i> {% trans "Ajouter transaction" %}</a>
       </div>
     <table class="table align-middle mb-0 bg-white">
         <thead class="bg-light">
           <tr>
-            <th>{% trans "Nom complet" %}</th>
-            <th>{% trans "Nationalité" %}</th>
-            <th>{% trans "Type" %}</th>
+            <th>{% trans "Type de transaction" %}</th>
+            <th>{% trans "Client" %}</th>
+            <th class="text-end">{% trans "Montant" %}</th>
+            <th class="text-end">{% trans "Taux" %}</th>
             <th class="text-end"></th>
           </tr>
         </thead>
         <tbody>
-         {% for customer in customers %}
+         {% for transaction in transactions %}
                 <tr>
-                    <td class="hidden customer_id">
-                        {{customer.id}}
+                    <td class="hidden transaction_id">
+                        {{transaction.id}}
                     </td>
                     <td>
                     <div class="d-flex align-items-center">
                         <div class="ms-3">
-                        <p class="fw-bold mb-1">{{customer.complete_name}}</p>
-                        <p class="text-muted mb-0"><i class="fas fa-phone"></i> {{customer.phone}}</p>
+                        {% if transaction.transaction_type == "sell" %}
+                          <span class="badge badge-success rounded-pill d-inline">{% trans 'Vente' %}</span>
+                        {% else %}
+                          <span class="badge badge-danger rounded-pill d-inline">{% trans 'Achat' %}</span>
+                        {% endif %}
+                        <p class="text-muted mb-0"><i class="fas fa-calendar"></i> {{transaction.created_at|date:"Y-m-d"}}</p>
                         </div>
                     </div>
                     </td>
                     <td>
-                    <p class="fw-normal mb-1">{{customer.nationality}}</p>
-                    <p class="text-muted mb-0">{{customer.identity_type}} <span class="separator">&#11044;</span> {{customer.identity_number}}</p>
-                    </td>
-                    <td>
-                    <span class="badge badge-success rounded-pill d-inline">{% trans 'Vente' %}</span>
+                    <p class="fw-normal mb-1">{{transaction.customer}}</p>
+                    <p class="text-muted mb-0">{{transaction.customer.identity_type}} <span class="separator">&#11044;</span> {{transaction.customer.identity_number}}</p>
                     </td>
                     <td class="text-end">
-                    <a href="{% url 'update_customer' customer.pk %}" type="button" class="btn btn-link btn-sm btn-rounded">
+                    {{transaction.amount|floatformat:2|intcomma}} {{transaction.currency}}
+                    </td>
+                    <td class="text-end">
+                      {{transaction.rate|floatformat:2|intcomma}}
+                      </td>
+                    <td class="text-end">
+                    <a href="{% url 'update_transaction' transaction.pk %}" type="button" class="btn btn-link btn-sm btn-rounded">
                         <i class="p1p3 fas fa-edit"></i>
                     </a>
-                    <a class="delete_customer" type="button" class="btn btn-link btn-sm btn-rounded">
+                    <a class="delete_transaction" type="button" class="btn btn-link btn-sm btn-rounded">
                         <i class="p1p3 mdb_danger fas fa-trash"></i>
                     </a>
                     </td>
@@ -103,13 +111,13 @@ $( document ).ready(function() {
 //////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
 
-$(document).on("click", ".delete_customer", function() {
+$(document).on("click", ".delete_transaction", function() {
 
-    customer_id = $(this).closest("tr").find(".customer_id").text()
+    transaction_id = $(this).closest("tr").find(".transaction_id").text()
     table_line = $(this).closest("tr")
     Swal.fire({
         title: translate_js('Attention', "FR"),
-        text: translate_js("Voulez-vous vraiment supprimer ce client ? Cela supprimera par conséquent toutes les transactions associées!", "FR"),
+        text: translate_js("Voulez-vous vraiment supprimer cette transaction ? Cela supprimera par conséquent toutes les informations associées!", "FR"),
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -119,8 +127,8 @@ $(document).on("click", ".delete_customer", function() {
     }).then((result) => {
         if (result.isConfirmed) {
             data_dict = {
-            "action": "delete_customer",
-            "customer_id": customer_id,
+            "action": "delete_transaction",
+            "transaction_id": transaction_id,
             }
             $.ajax({
             headers: {
@@ -146,7 +154,7 @@ $(document).on("click", ".delete_customer", function() {
                 {
                     Swal.fire({
                         icon: 'success',
-                        title: translate_js("Client supprimé avec succès", "FR"),
+                        title: translate_js("Transaction supprimée avec succés", "FR"),
                         showConfirmButton: false,
                         timer: 1500
                     })

@@ -5,11 +5,14 @@ from django.db.models import Sum, Count, F, Max, Min
 
 
 # DECLARING GLOBAL VARIABLES
+
 SEX_CHOICES = [
     ("M", "M"), ("F", "F")]
 IDENTITY_CHOICES = [
     ("PASSPORT", "PASSPORT"), ("ID", "ID")]
-    
+TRANSACTION_TYPES = [
+    ("buy", "buy"), ("sell", "sell")]
+
 # DECLARING CLASSES
 
 class UserProfile(models.Model):
@@ -56,11 +59,45 @@ class Customer(models.Model):
     def __str__(self):
         return self.complete_name
 
+
 class CustomerNotes(models.Model):
     """
     Here we store all the notes and remarks about a customer
     """
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    note = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.customer + str(self.created_at)
+
+
+class Transaction(models.Model):
+    """
+    Transactions table.
+    """
+    transaction_type = models.CharField(
+        max_length=50,
+        null=False,
+        blank=False,
+        choices=TRANSACTION_TYPES)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    currency = models.CharField(max_length=10, null=False, blank=False)
+    amount = models.FloatField()
+    rate = models.FloatField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return str(self.transaction_type) +  " - " + str(self.customer)
+
+
+class TransactionNotes(models.Model):
+    """
+    Here we store all the notes and remarks about a customer
+    """
+    transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE)
     note = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

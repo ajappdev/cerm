@@ -1,0 +1,430 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load humanize %}
+{% load static %}
+
+{% block page_content %}
+
+
+<div class="container">
+    <div id="div_form" class="row">
+        <div class="col-lg-2 col-12 col-md-12">
+        </div>
+        <div class="col-lg-4 col-12 col-md-12">
+        <div class="row">
+            <div class="col-lg-12 col-12 col-md-12">
+                <div class="form-group mb-3">
+                    <label for="customer" class="form-label">{% trans "Client" %}</label>
+                    <input placeholder='{% trans "Chercher par nom du client ou ID" %}' value="{{transaction.customer}}" name="customer" type="text" class="search_customer_input form-control">
+                    <span  class="id_customer_selectionne">{{transaction.customer.id|safe}}</span>
+                    <div class="searched_customers"></div>               
+                </div>
+            </div>
+            <div class="col-lg-6 col-12 col-md-12">
+                <div class="form-group mb-3">
+                    <label for="transaction_type" class="form-label">{% trans "Type de transaction" %}</label>
+                    <select class="form-control" id="transaction_type" name="transaction_type">
+                        <option value=''></option>
+                        <option value='sell'>{% trans "Vente" %}</option>
+                        <option value='buy'>{% trans "Achat" %}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-6 col-12 col-md-12">
+                <div class="form-group mb-3">
+                    <label for="transaction_currency" class="form-label">{% trans "Devise" %}</label>
+                    <select class="form-control" id="transaction_currency" name="transaction_currency">
+                        <option value=''></option>
+                        <option value='EUR'>EUR - Euro</option>
+                        <option value='USD'>USD - US Dollar</option>
+                        <option value='AED'>AED - UAE Dirham</option>
+                        <option value='CAD'>CAD - Canadian Dollar</option>
+                        <option value='SAR'>SAR - Saudi Riyal</option>
+                        <option value='DZD'>DZD - Algerian Dinar</option>
+                        <option value='EGP'>EGP - Egyptian Pound</option>
+                        <option value='JPY'>JPY - Yen</option>
+                        <option value='TND'>TND - Tunisian Dinar</option>
+                        <option value='AFN'>AFN - Afghani</option>
+                        <option value='ALL'>ALL - Lek</option>
+                        <option value='AMD'>AMD - Armenian Dram</option>
+                        <option value='ANG'>ANG - Netherlands Antillean Guilder</option>
+                        <option value='AOA'>AOA - Kwanza</option>
+                        <option value='ARS'>ARS - Argentine Peso</option>
+                        <option value='AUD'>AUD - Australian Dollar</option>
+                        <option value='AWG'>AWG - Aruban Florin</option>
+                        <option value='AZN'>AZN - Azerbaijan Manat</option>
+                        <option value='BAM'>BAM - Convertible Mark</option>
+                        <option value='BBD'>BBD - Barbados Dollar</option>
+                        <option value='BDT'>BDT - Taka</option>
+                        <option value='BGN'>BGN - Bulgarian Lev</option>
+                        <option value='BHD'>BHD - Bahraini Dinar</option>
+                        <option value='BIF'>BIF - Burundi Franc</option>
+                        <option value='BMD'>BMD - Bermudian Dollar</option>
+                        <option value='BND'>BND - Brunei Dollar</option>
+                        <option value='BOB'>BOB - Boliviano</option>
+                        <option value='BOV'>BOV - Mvdol</option>
+                        <option value='BRL'>BRL - Brazilian Real</option>
+                        <option value='BSD'>BSD - Bahamian Dollar</option>
+                        <option value='BTN'>BTN - Ngultrum</option>
+                        <option value='BWP'>BWP - Pula</option>
+                        <option value='BYN'>BYN - Belarusian Ruble</option>
+                        <option value='BZD'>BZD - Belize Dollar</option>
+                        <option value='CDF'>CDF - Congolese Franc</option>
+                        <option value='CHE'>CHE - WIR Euro</option>
+                        <option value='CHF'>CHF - Swiss Franc</option>
+                        <option value='CHW'>CHW - WIR Franc</option>
+                        <option value='CLF'>CLF - Unidad de Fomento</option>
+                        <option value='CLP'>CLP - Chilean Peso</option>
+                        <option value='CNY'>CNY - Yuan Renminbi</option>
+                        <option value='COP'>COP - Colombian Peso</option>
+                        <option value='COU'>COU - Unidad de Valor Real</option>
+                        <option value='CRC'>CRC - Costa Rican Colon</option>
+                        <option value='CUC'>CUC - Peso Convertible</option>
+                        <option value='CUP'>CUP - Cuban Peso</option>
+                        <option value='CVE'>CVE - Cabo Verde Escudo</option>
+                        <option value='CZK'>CZK - Czech Koruna</option>
+                        <option value='DJF'>DJF - Djibouti Franc</option>
+                        <option value='DKK'>DKK - Danish Krone</option>
+                        <option value='DOP'>DOP - Dominican Peso</option>
+                        <option value='ERN'>ERN - Nakfa</option>
+                        <option value='ETB'>ETB - Ethiopian Birr</option>
+                        <option value='FJD'>FJD - Fiji Dollar</option>
+                        <option value='FKP'>FKP - Falkland Islands Pound</option>
+                        <option value='GBP'>GBP - Pound Sterling</option>
+                        <option value='GEL'>GEL - Lari</option>
+                        <option value='GHS'>GHS - Ghana Cedi</option>
+                        <option value='GIP'>GIP - Gibraltar Pound</option>
+                        <option value='GMD'>GMD - Dalasi</option>
+                        <option value='GNF'>GNF - Guinean Franc</option>
+                        <option value='GTQ'>GTQ - Quetzal</option>
+                        <option value='GYD'>GYD - Guyana Dollar</option>
+                        <option value='HKD'>HKD - Hong Kong Dollar</option>
+                        <option value='HNL'>HNL - Lempira</option>
+                        <option value='HRK'>HRK - Kuna</option>
+                        <option value='HTG'>HTG - Gourde</option>
+                        <option value='HUF'>HUF - Forint</option>
+                        <option value='IDR'>IDR - Rupiah</option>
+                        <option value='ILS'>ILS - New Israeli Sheqel</option>
+                        <option value='INR'>INR - Indian Rupee</option>
+                        <option value='IQD'>IQD - Iraqi Dinar</option>
+                        <option value='IRR'>IRR - Iranian Rial</option>
+                        <option value='ISK'>ISK - Iceland Krona</option>
+                        <option value='JMD'>JMD - Jamaican Dollar</option>
+                        <option value='JOD'>JOD - Jordanian Dinar</option>
+                        <option value='KES'>KES - Kenyan Shilling</option>
+                        <option value='KGS'>KGS - Som</option>
+                        <option value='KHR'>KHR - Riel</option>
+                        <option value='KMF'>KMF - Comorian Franc </option>
+                        <option value='KPW'>KPW - North Korean Won</option>
+                        <option value='KRW'>KRW - Won</option>
+                        <option value='KWD'>KWD - Kuwaiti Dinar</option>
+                        <option value='KYD'>KYD - Cayman Islands Dollar</option>
+                        <option value='KZT'>KZT - Tenge</option>
+                        <option value='LAK'>LAK - Lao Kip</option>
+                        <option value='LBP'>LBP - Lebanese Pound</option>
+                        <option value='LKR'>LKR - Sri Lanka Rupee</option>
+                        <option value='LRD'>LRD - Liberian Dollar</option>
+                        <option value='LSL'>LSL - Loti</option>
+                        <option value='LYD'>LYD - Libyan Dinar</option>
+                        <option value='MAD'>MAD - Moroccan Dirham</option>
+                        <option value='MDL'>MDL - Moldovan Leu</option>
+                        <option value='MGA'>MGA - Malagasy Ariary</option>
+                        <option value='MKD'>MKD - Denar</option>
+                        <option value='MMK'>MMK - Kyat</option>
+                        <option value='MNT'>MNT - Tugrik</option>
+                        <option value='MOP'>MOP - Pataca</option>
+                        <option value='MRU'>MRU - Ouguiya</option>
+                        <option value='MUR'>MUR - Mauritius Rupee</option>
+                        <option value='MVR'>MVR - Rufiyaa</option>
+                        <option value='MWK'>MWK - Malawi Kwacha</option>
+                        <option value='MXN'>MXN - Mexican Peso</option>
+                        <option value='MXV'>MXV - Mexican Unidad de Inversion (UDI)</option>
+                        <option value='MYR'>MYR - Malaysian Ringgit</option>
+                        <option value='MZN'>MZN - Mozambique Metical</option>
+                        <option value='NAD'>NAD - Namibia Dollar</option>
+                        <option value='NGN'>NGN - Naira</option>
+                        <option value='NIO'>NIO - Cordoba Oro</option>
+                        <option value='NOK'>NOK - Norwegian Krone</option>
+                        <option value='NPR'>NPR - Nepalese Rupee</option>
+                        <option value='NZD'>NZD - New Zealand Dollar</option>
+                        <option value='OMR'>OMR - Rial Omani</option>
+                        <option value='PAB'>PAB - Balboa</option>
+                        <option value='PEN'>PEN - Sol</option>
+                        <option value='PGK'>PGK - Kina</option>
+                        <option value='PHP'>PHP - Philippine Peso</option>
+                        <option value='PKR'>PKR - Pakistan Rupee</option>
+                        <option value='PLN'>PLN - Zloty</option>
+                        <option value='PYG'>PYG - Guarani</option>
+                        <option value='QAR'>QAR - Qatari Rial</option>
+                        <option value='RON'>RON - Romanian Leu</option>
+                        <option value='RSD'>RSD - Serbian Dinar</option>
+                        <option value='RUB'>RUB - Russian Ruble</option>
+                        <option value='RWF'>RWF - Rwanda Franc</option>
+                        <option value='SBD'>SBD - Solomon Islands Dollar</option>
+                        <option value='SCR'>SCR - Seychelles Rupee</option>
+                        <option value='SDG'>SDG - Sudanese Pound</option>
+                        <option value='SEK'>SEK - Swedish Krona</option>
+                        <option value='SGD'>SGD - Singapore Dollar</option>
+                        <option value='SHP'>SHP - Saint Helena Pound</option>
+                        <option value='SLL'>SLL - Leone</option>
+                        <option value='SOS'>SOS - Somali Shilling</option>
+                        <option value='SRD'>SRD - Surinam Dollar</option>
+                        <option value='SSP'>SSP - South Sudanese Pound</option>
+                        <option value='STN'>STN - Dobra</option>
+                        <option value='SVC'>SVC - El Salvador Colon</option>
+                        <option value='SYP'>SYP - Syrian Pound</option>
+                        <option value='SZL'>SZL - Lilangeni</option>
+                        <option value='THB'>THB - Baht</option>
+                        <option value='TJS'>TJS - Somoni</option>
+                        <option value='TMT'>TMT - Turkmenistan New Manat</option>
+                        <option value='TRY'>TRY - Turkish Lira</option>
+                        <option value='TTD'>TTD - Trinidad and Tobago Dollar</option>
+                        <option value='TWD'>TWD - New Taiwan Dollar</option>
+                        <option value='TZS'>TZS - Tanzanian Shilling</option>
+                        <option value='UAH'>UAH - Hryvnia</option>
+                        <option value='UGX'>UGX - Uganda Shilling</option>
+                        <option value='UYI'>UYI - Uruguay Peso en Unidades Indexadas (UI)</option>
+                        <option value='UYU'>UYU - Peso Uruguayo</option>
+                        <option value='UYW'>UYW - Unidad Previsional</option>
+                        <option value='UZS'>UZS - Uzbekistan Sum</option>
+                        <option value='VES'>VES - Bolívar Soberano</option>
+                        <option value='VND'>VND - Dong</option>
+                        <option value='VUV'>VUV - Vatu</option>
+                        <option value='WST'>WST - Tala</option>
+                        <option value='XAF'>XAF - CFA Franc BEAC</option>
+                        <option value='XAG'>XAG - Silver</option>
+                        <option value='XAU'>XAU - Gold</option>
+                        <option value='XCD'>XCD - East Caribbean Dollar</option>
+                        <option value='XDR'>XDR - SDR (Special Drawing Right)</option>
+                        <option value='XOF'>XOF - CFA Franc BCEAO</option>
+                        <option value='XPD'>XPD - Palladium</option>
+                        <option value='XPF'>XPF - CFP Franc</option>
+                        <option value='XPT'>XPT - Platinum</option>
+                        <option value='XSU'>XSU - Sucre</option>
+                        <option value='XUA'>XUA - ADB Unit of Account</option>
+                        <option value='YER'>YER - Yemeni Rial</option>
+                        <option value='ZAR'>ZAR - Rand</option>
+                        <option value='ZMW'>ZMW - Zambian Kwacha</option>
+                        <option value='ZWL'>ZWL - Zimbabwe Dollar</option>                                               
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-6 col-12 col-md-12">
+                <div class="form-group mb-3">
+                    <label for="transaction_amount" class="form-label">{% trans "Montant" %}</label>
+                    <input value="{{transaction.amount|safe}}" type="number" class="form-control" id="transaction_amount" value="0.00" name="transaction_amount">
+                </div>
+            </div>
+            <div class="col-lg-6 col-12 col-md-12">
+                <div class="form-group mb-3">
+                    <label for="transaction_rate" class="form-label">{% trans "Taux" %}</label>
+                    <input value="{{transaction.rate|safe}}" type="number" class="form-control" id="transaction_rate" value="0.00" name="transaction_rate">
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="col-lg-4 col-12 col-md-12">
+
+                <div class="transaction_notes col-lg-12 col-12 col-md-12 mb-3">
+                    <p class="transaction_notes_title">{% trans "Notes sur le client" %}</p>
+                    <div style="padding: 10px; max-height: 100px; overflow-y: auto;">
+                        {% for note in transactions_notes %}
+                        <p class="transaction_note"><strong>{{ note.created_at|date:"Y-m-d" }}</strong> : {{ note.note }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-lg-12 col-12 col-md-12">
+                    <div class="form-group mb-3">
+                        <label for="transaction_note" class="form-label">{% trans "Nouvelle Note" %}</label>
+                        <textarea style="resize:none;" type="text" class="form-control" id="transaction_note" name="transaction_note"></textarea>
+                    </div>
+                </div>
+
+        </div>
+        <div class="mt-4" style="text-align:center;">
+            <button id="save_transaction" class="next_back_buttons btn btn-lg btn-success"><i class="fas fa-save"></i> {% trans "Enregistrer" %}</button>
+        </div>
+    </div>
+    <div id="load_div" class="hidden" style="text-align:center;">
+        <img src="{% static 'assets/img/load.gif' %}">
+    </div>
+    </div>
+</div>
+
+
+<script
+  src="https://code.jquery.com/jquery-3.6.1.js"
+  integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
+  crossorigin="anonymous"></script>
+<script>
+
+$( document ).ready(function() {
+
+});
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+/////////////////////////////AT LOAD//////////////////////
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+
+var transaction_id = "{{transaction.id|safe}}"
+$("#transaction_type").val("{{transaction.transaction_type}}")
+$("#transaction_currency").val("{{transaction.currency}}")
+
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+////////////////////////CLICK EVENTS//////////////////////
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+
+$(document).on('click', '.lign_customer', function () {
+
+    $(this).closest(".row").find(
+                ".search_customer_input").val(
+                    $(this).find(".nom_produit_customer").text());
+    $(this).closest(".row").find(
+                ".id_customer_selectionne").text(
+                    $(this).find(".id_customer").text());				
+    $(this).closest(".row").find(
+                ".searched_customers").hide();
+
+    recap()
+
+});
+
+
+$(document).on("click", "#save_transaction", function() {
+
+if (validate_form() == true)
+    {
+        data_dict = {
+            "action": "save_transaction",
+            "transaction_type": $("#transaction_type").val(),
+            "transaction_note": $("#transaction_note").val(),
+            "transaction_currency": $("#transaction_currency").val(),
+            "transaction_amount": $("#transaction_amount").val(),
+            "transaction_id": transaction_id,
+            "transaction_rate": $("#transaction_rate").val(),
+            "customer_id": $(".id_customer_selectionne").text(),
+        }
+        $("#load_div").show("")
+        $("#div_form").hide("")
+
+        $.ajax({
+            headers: {
+                "X-CSRFToken": getCookie("csrftoken")
+            },
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            url: "{% url 'ajax_calls' %}",
+            data: JSON.stringify(data_dict),
+            success: function(response) {
+                if (response['error'] != "0")
+                {
+                    Swal.fire({
+                        icon: 'error',
+                        title: translate_js('Une erreur est survenue!', "FR"),
+                        position: 'center',
+                        showConfirmButton: false,
+                        text: response['error_text'],
+                    })
+                    $("#load_div").hide("")
+                    $("#div_form").show("")
+                }else
+                {
+                    document.location.href = '/transactions/?success_message=updated'
+                }
+            }
+        })
+    }else
+    {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            position: 'center',
+            showConfirmButton: false,
+            timer: 1500,
+            text: translate_js('Merci de remplire les champs indiquées en rouge !', "FR"),
+        })
+    }
+});
+
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+////////////////////////KEYUP EVENTS//////////////////////
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+
+$(document).on('keyup', '.search_customer_input', function () {
+			$(".searched_customers").hide();
+			$(this).css("background-color", "white")
+			$(this).closest(".row").find(
+					".id_customer_selectionne").text("")
+
+			initials = $(this).val();
+			iam = $(this)
+			if (initials == "")
+			{
+				iam.closest(".row").find(
+						".searched_customers").hide();
+			}else
+			{
+				iam.closest(".row").find(
+						".searched_customers").show();
+			}
+			data_dict = {"action": "get_my_customers", "initials": initials}
+			$.ajax({
+			headers: { "X-CSRFToken": getCookie("csrftoken") },
+			type: 'POST',
+			processData: false,
+			contentType: false,
+			url: "{% url 'ajax_calls' %}",
+			data : JSON.stringify(data_dict),
+			success: function (response) {
+				iam.closest(".row").find(
+						".searched_customers").html(response['html'])
+				}
+			})
+		});
+
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+////////////////////////FUNCTIONS//////////////////////
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+
+function validate_form()
+{
+    return_value = true
+    if ($(".id_customer_selectionne").text() == "")
+    {
+        $(".search_customer_input").css("background-color", "#ffc3c3");
+        return_value = false
+    }
+    if ($("#transaction_type").val() == "")
+    {
+        $("#transaction_type").css("background-color", "#ffc3c3")
+        return_value = false
+    }
+    if ($("#transaction_currency").val() == "")
+    {
+        $("#transaction_currency").css("background-color", "#ffc3c3")
+        return_value = false
+    }
+    if ($("#transaction_amount").val() <= 0)
+    {
+        $("#transaction_amount").css("background-color", "#ffc3c3")
+        return_value = false
+    }
+    if ($("#transaction_rate").val() <= 0)
+    {
+        $("#transaction_rate").css("background-color", "#ffc3c3")
+        return_value = false
+    }
+    return return_value
+}
+
+</script>
+
+{% endblock %}

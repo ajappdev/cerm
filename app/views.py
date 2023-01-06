@@ -3,6 +3,8 @@ from django.conf import settings
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.templatetags.static import static
+from django.template.loader import render_to_string
+from django.db.models import Q
 
 # GENERAL DECLARATIONS
 import pandas as pd
@@ -13,8 +15,8 @@ from readmrz import MrzDetector, MrzReader
 import pytesseract
 from datetime import date, datetime
 
-pytesseract.pytesseract.tesseract_cmd = 'C:/Program Files/Tesseract-OCR/tesseract.exe'  # your path may be different
-
+pytesseract.pytesseract.tesseract_cmd = 'C:/Users/user/AppData/Local/Programs/Tesseract-OCR/tesseract.exe'  # your path may be different
+# pytesseract.pytesseract.tesseract_cmd = 'C:/Program Files/Tesseract-OCR/tesseract.exe'  # your path may be different
 # APP DECLARATIONS
 import app.models as am
 import app.forms as af
@@ -29,6 +31,12 @@ def upload_page(request):
 def landing_page(request):
     template = 'blank.html'
 
+    context = {}
+    return render(request, template, context)
+
+
+def add_transaction(request):
+    template = 'transaction/add-transaction.html'
     context = {}
     return render(request, template, context)
 
@@ -48,12 +56,21 @@ def update_customer(request, pk: int):
     return render(request, template, context)
 
 
+def update_transaction(request, pk: int):
+    template = 'transaction/update-transaction.html'
+    transaction = am.Transaction.objects.get(id=pk)
+    transactions_notes = am.TransactionNotes.objects.filter(
+        transaction=transaction).order_by("-created_at")
+    context = {"transaction": transaction, "transactions_notes": transactions_notes}
+    return render(request, template, context)
+
+
 def customers(request):
     template = 'customer/index.html'
 
     success_message = request.GET.get('success_message')
     if success_message == "creation":
-        success_message = "Client créée avec succès"
+        success_message = "Client créé avec succès"
     elif success_message == "updated":
         success_message = "Client modifié avec succès"
     else:
@@ -61,6 +78,22 @@ def customers(request):
 
     customers = am.Customer.objects.all()
     context = {"customers": customers, "success_message": success_message}
+    return render(request, template, context)
+
+
+def transactions(request):
+    template = 'transaction/index.html'
+
+    success_message = request.GET.get('success_message')
+    if success_message == "creation":
+        success_message = "Transaction créée avec succès"
+    elif success_message == "updated":
+        success_message = "Transaction modifiée avec succès"
+    else:
+        success_message = ""
+
+    transactions = am.Transaction.objects.all()
+    context = {"transactions": transactions, "success_message": success_message}
     return render(request, template, context)
 
 
@@ -91,11 +124,26 @@ def register(request):
 
 
 def ajax_calls(request):
+
     if request.method == 'POST':
         received_json_data = json.loads(request.body)
         action = received_json_data['action']
 
-        if action == "upload_identity_files_add_customer":
+        if action == "get_my_customers":
+            initials = received_json_data['initials']
+            my_customers = am.Customer.objects.filter(
+                Q(complete_name__icontains=initials) |
+                Q(identity_number__icontains = initials))[: 15]
+            html = render_to_string(
+                        template_name="general-widgets/customers-list.html", 
+                        context={
+                            "my_customers": my_customers,
+                        }
+                    )
+            data_dict = {"html": html}
+
+
+        elif action == "upload_identity_files_add_customer":
 
             file_path = os.path.join(
                 settings.STATIC_ROOT, 'uploads/passport.jpg')
@@ -114,7 +162,7 @@ def ajax_calls(request):
                 m00.DATE_PASSPORTS).strftime(m00.DATE_SHORT_LOCAL_WITH_SLASH)
             data_dict = {"id_reading": result}
 
-        if action == "delete_customer":
+        elif action == "delete_customer":
             error = 0
             error_text = ""
             try:
@@ -125,7 +173,50 @@ def ajax_calls(request):
                 error = 1
             data_dict = {"error": error, "error_text": error_text}
 
-        if action == "save_customer":
+        elif action == "delete_transaction":
+            error = 0
+            error_text = ""
+            try:
+                am.Transaction.objects.filter(
+                    id=int(received_json_data['transaction_id'])).delete()
+            except Exception as e:
+                error_text = "EXCEPTION, AJAX_CALLS, DELETE_TRANSACTION, 1, " + str(e)
+                error = 1
+            data_dict = {"error": error, "error_text": error_text}
+
+        elif action == "save_transaction":
+            error = 0
+            error_text = ""
+            
+            if received_json_data['transaction_id'] == 0:
+                transaction = am.Transaction()
+            else:
+                transaction = am.Transaction.objects.get(
+                    id=int(received_json_data['transaction_id']))
+            try:
+                transaction.transaction_type = received_json_data['transaction_type']
+                transaction.currency = received_json_data['transaction_currency']
+                transaction.amount = received_json_data['transaction_amount']
+                transaction.rate = received_json_data['transaction_rate']
+                transaction.customer = am.Customer.objects.get(id=int(received_json_data['customer_id']))
+                transaction.save()
+            except Exception as e:
+                error_text = "EXCEPTION, AJAX_CALLS, SAVE_TRANSACTION, " + str(e)
+                error = 1
+
+            if received_json_data['transaction_note'] != "" and error == 0:
+                try:
+                    new_transacton_note = am.TransactionNotes()
+                    new_transacton_note.note = received_json_data['transaction_note']
+                    new_transacton_note.transaction = transaction
+                    new_transacton_note.save()
+                except Exception as e:
+                    error_text = "EXCEPTION, AJAX_CALLS, SAVE_TRANSACTION_NOTE, " + str(e)
+                    error = 1
+
+            data_dict = {"error": error, "error_text": error_text}
+
+        elif action == "save_customer":
             error = 0
             error_text = ""
             

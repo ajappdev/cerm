@@ -67,16 +67,12 @@ body
 }
 
 body {
-    margin: 0;
+    margin-top: 0;
     padding: 0;
     background-color: var(--clr-light);
     color: var(--clr-black);
     font-family: 'Poppins', sans-serif;
     font-size: 1.125rem;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
 
   .next_back_buttons
@@ -149,12 +145,12 @@ body {
   {
     font-size:1.9em;
   }
-  .customer_notes
+  .customer_notes, .transaction_notes
   {
     font-size:0.8em;
     color:#383737;
   }
-  .customer_notes_title
+  .customer_notes_title, .transaction_notes_title
   {
     background: #d9d9d9;
     color: #545454;
@@ -164,3 +160,17 @@ body {
     border-radius: 2px;
     font-weight: 600;
   }
+  .searched_customers
+{
+    background-color: white;
+    border: 1px solid #b8ebd2;
+    border-radius: 2px;
+    padding: 5px;
+    margin-top: 2px;
+	  display: none;
+    font-size:0.8em;
+}
+.id_customer_selectionne
+{
+	display: none;
+}
