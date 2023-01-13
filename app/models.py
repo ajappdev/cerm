@@ -59,6 +59,22 @@ class Customer(models.Model):
     def __str__(self):
         return self.complete_name
 
+    def transactions_count(self):
+        return len(Transaction.objects.filter(customer=self))
+
+    def sell_transactions_count(self):
+        return len(Transaction.objects.filter(customer=self, transaction_type="sell"))
+
+    def buy_transactions_count(self):
+        return len(Transaction.objects.filter(customer=self, transaction_type="buy"))
+
+    def type_customer(self):
+        if self.sell_transactions_count() > self.buy_transactions_count():
+            return "sell"
+        elif self.sell_transactions_count() > self.buy_transactions_count():
+            return "buy"
+        else:
+            return "ND"
 
 class CustomerNotes(models.Model):
     """

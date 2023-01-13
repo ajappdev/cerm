@@ -15,6 +15,7 @@ urlpatterns = [
     path('customers/', av.customers, name='customers'),
     path('auth/register/', av.register, name='register'),
     path('ajax-calls/', av.ajax_calls, name='ajax_calls'),
+    path('upload-id-file/', av.upload_id_file, name='upload_id_file'),
 
 ]
 

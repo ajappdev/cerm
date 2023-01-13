@@ -9,6 +9,29 @@
     <div class="mb-3 d-grid gap-2 d-md-flex justify-content-md-end">
         <a href="{% url 'add_customer' %}" class="btn btn-success" type="button"><i style="margin-right:5px;" class="fas fa-add"></i> {% trans "Ajouter client" %}</a>
       </div>
+
+      <div class="filter-row row mb-3">
+          <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-4 col-12 col-md-12">
+                        <input id="filter_name_customer" class="form-control" placeholder="{% trans 'Chercher par nom du client ou ID' %}">
+                    </div>
+                    <div class="col-lg-4 col-12 col-md-12">
+                        <input id="filter_nationality" class="form-control" placeholder="{% trans 'Nationalité' %}">
+                    </div>
+                    <div class="col-lg-4 col-12 col-md-12">
+                        <select id="filter_type_customer" class="form-control">
+                            <option value="">{% trans 'Type de client' %}</option>
+                            <option value="sell">{% trans 'Vente' %}</option>
+                            <option value="buy">{% trans 'Achat' %}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+
     <table class="table align-middle mb-0 bg-white">
         <thead class="bg-light">
           <tr>
@@ -22,7 +45,7 @@
          {% for customer in customers %}
                 <tr>
                     <td class="hidden customer_id">
-                        {{customer.id}}
+                        {{customer.id|safe}}
                     </td>
                     <td>
                     <div class="d-flex align-items-center">
@@ -37,7 +60,13 @@
                     <p class="text-muted mb-0">{{customer.identity_type}} <span class="separator">&#11044;</span> {{customer.identity_number}}</p>
                     </td>
                     <td>
-                    <span class="badge badge-success rounded-pill d-inline">{% trans 'Vente' %}</span>
+                    {% if customer.type_customer == 'sell' %}
+                        <span class="badge badge-success rounded-pill d-inline">{% trans 'Vente' %}</span>
+                    {% elif customer.type_customer == 'buy' %}
+                        <span class="badge badge-danger rounded-pill d-inline">{% trans 'Achat' %}</span>
+                    {% else %}
+                        <span class="badge badge-info rounded-pill d-inline">{% trans 'Non-défini' %}</span>
+                    {% endif %}
                     </td>
                     <td class="text-end">
                     <a href="{% url 'update_customer' customer.pk %}" type="button" class="btn btn-link btn-sm btn-rounded">

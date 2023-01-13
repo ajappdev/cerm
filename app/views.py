@@ -5,6 +5,8 @@ from django.contrib.auth import login
 from django.templatetags.static import static
 from django.template.loader import render_to_string
 from django.db.models import Q
+from django.views.decorators.csrf import csrf_exempt
+from django.core.files.storage import FileSystemStorage
 
 # GENERAL DECLARATIONS
 import pandas as pd
@@ -14,6 +16,8 @@ import json
 from readmrz import MrzDetector, MrzReader
 import pytesseract
 from datetime import date, datetime
+from os import path
+from shutil import move
 
 pytesseract.pytesseract.tesseract_cmd = 'C:/Users/user/AppData/Local/Programs/Tesseract-OCR/tesseract.exe'  # your path may be different
 # pytesseract.pytesseract.tesseract_cmd = 'C:/Program Files/Tesseract-OCR/tesseract.exe'  # your path may be different
@@ -52,7 +56,10 @@ def update_customer(request, pk: int):
     customer = am.Customer.objects.get(id=pk)
     customer_notes = am.CustomerNotes.objects.filter(
         customer=customer).order_by("-created_at")
-    context = {"customer": customer, "customer_notes": customer_notes}
+    customer_id_file = path.join(
+        settings.MEDIA_ROOT, str(customer.id) + ".jpg")
+    customer_id_file = customer_id_file.replace("\\", "&C&R&")
+    context = {"customer": customer, "customer_id_file": customer_id_file, "customer_notes": customer_notes}
     return render(request, template, context)
 
 
@@ -122,6 +129,28 @@ def register(request):
         "registration_errors": registration_errors}
     return render(request, template, context)
 
+@csrf_exempt
+def upload_id_file(request):
+    if request.method == 'POST':
+        files = request.FILES.getlist("0")
+
+        for f in files:
+            fs = FileSystemStorage(path.join(
+                settings.MEDIA_ROOT))
+            filename = fs.save(request.POST['key'] + ".jpg", f)
+        try:
+            file_path = os.path.join(
+                settings.MEDIA_ROOT, request.POST['key'] + ".jpg")
+            if request.POST['key'] == "PASSPORT":
+                result = m00.process_id_card(file_path)
+            else:
+                result = m00.process_passport(file_path)
+            data_dict = {"MRZ_found": 1, "id_reading": result, "tmp_file": request.POST['key'] + ".jpg"}
+        except Exception as e:
+            print(e)
+            data_dict = {"MRZ_found": 0, "tmp_file": request.POST['key'] + ".jpg"}
+
+        return JsonResponse(data=data_dict, safe=False)
 
 def ajax_calls(request):
 
@@ -142,25 +171,6 @@ def ajax_calls(request):
                     )
             data_dict = {"html": html}
 
-
-        elif action == "upload_identity_files_add_customer":
-
-            file_path = os.path.join(
-                settings.STATIC_ROOT, 'uploads/passport.jpg')
-            detector = MrzDetector()
-            reader = MrzReader()
-            image = detector.read(file_path)
-            m00.process_id_card(file_path)
-            cropped = detector.crop_area(image)
-            result = reader.process(cropped)
-            result['country'] = next(item for item in m00.COUNTRY_CODES if item["alpha-3"] == result['nationality'])['name']
-            result['birth_date'] = datetime.strptime(
-                str(result['birth_date']),
-                m00.DATE_PASSPORTS).strftime(m00.DATE_SHORT_LOCAL_WITH_SLASH)
-            result['expiry_date'] = datetime.strptime(
-                str(result['expiry_date']),
-                m00.DATE_PASSPORTS).strftime(m00.DATE_SHORT_LOCAL_WITH_SLASH)
-            data_dict = {"id_reading": result}
 
         elif action == "delete_customer":
             error = 0
@@ -237,6 +247,12 @@ def ajax_calls(request):
                 customer.address = received_json_data['customer_address']
                 customer.sex = received_json_data['customer_sex']
                 customer.save()
+                print(received_json_data['customer_key'])
+                old_file = path.join(
+                    settings.MEDIA_ROOT, received_json_data['customer_key'] + ".jpg")
+                new_file = path.join(
+                    settings.MEDIA_ROOT, str(customer.id) + ".jpg")
+                move(old_file, new_file)
             except Exception as e:
                 error_text = "EXCEPTION, AJAX_CALLS, SAVE_CUSTOMER, " + str(e)
                 error = 1
@@ -255,3 +271,6 @@ def ajax_calls(request):
 
 
         return JsonResponse(data=data_dict, safe=False)
+
+for c in m00.COUNTRY_CODES:
+    print("<option value='" + c['name'] + " - " + c['alpha-3'] + "'>" + c['name'] + " - " + c['alpha-3'] + "</option>")
