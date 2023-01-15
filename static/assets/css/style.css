@@ -186,3 +186,8 @@ body {
 {
 	display: none;
 }
+.card-filter
+{
+  background: #dde5f0;
+  border: 2px solid #adbad8;
+}

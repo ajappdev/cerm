@@ -74,7 +74,7 @@ class Customer(models.Model):
         elif self.sell_transactions_count() > self.buy_transactions_count():
             return "buy"
         else:
-            return "ND"
+            return ""
 
 class CustomerNotes(models.Model):
     """

@@ -158,7 +158,33 @@ def ajax_calls(request):
         received_json_data = json.loads(request.body)
         action = received_json_data['action']
 
-        if action == "get_my_customers":
+        if action == "filter_customers_list":
+
+            customer_name_or_id = received_json_data['customer_name_or_id']
+            customer_nationality = received_json_data['customer_nationality']
+            customer_type = received_json_data['customer_type']
+            page = received_json_data['page']
+    
+            customers = am.Customer.objects.filter(
+                Q(complete_name__icontains=customer_name_or_id) |
+                Q(identity_number__icontains=customer_name_or_id),
+                nationality__icontains=customer_nationality
+            )
+
+            customers = [
+                c for c in customers if customer_type in c.type_customer()]
+
+            customers_list = m00.pagination(page, 1, customers)
+
+            html = render_to_string(
+                        template_name="customer/customers-table.html", 
+                        context={
+                            "customers": customers_list,
+                        }
+                    )
+            data_dict = {"html": html}
+
+        elif action == "get_my_customers":
             initials = received_json_data['initials']
             my_customers = am.Customer.objects.filter(
                 Q(complete_name__icontains=initials) |
@@ -271,6 +297,3 @@ def ajax_calls(request):
 
 
         return JsonResponse(data=data_dict, safe=False)
-
-for c in m00.COUNTRY_CODES:
-    print("<option value='" + c['name'] + " - " + c['alpha-3'] + "'>" + c['name'] + " - " + c['alpha-3'] + "</option>")
