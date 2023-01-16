@@ -174,7 +174,7 @@ def ajax_calls(request):
             customers = [
                 c for c in customers if customer_type in c.type_customer()]
 
-            customers_list = m00.pagination(page, 1, customers)
+            customers_list = m00.pagination(page, 10, customers)
 
             html = render_to_string(
                         template_name="customer/customers-table.html", 
@@ -183,6 +183,39 @@ def ajax_calls(request):
                         }
                     )
             data_dict = {"html": html}
+
+
+        if action == "filter_transactions_list":
+
+            customer_name_or_id = received_json_data['customer_name_or_id']
+            transaction_type = received_json_data['transaction_type']
+            transaction_date = received_json_data['transaction_date']
+            transaction_before = datetime.strptime(
+                str(transaction_date.split(" - ")[1]),
+                m00.DATE_SHORT_LOCAL_WITH_DASH)
+            transaction_after = datetime.strptime(
+                str(transaction_date.split(" - ")[0]),
+                m00.DATE_SHORT_LOCAL_WITH_DASH)
+            page = received_json_data['page']
+
+            transactions = am.Transaction.objects.filter(
+                transaction_type__icontains=transaction_type,
+                created_at__lte=transaction_before,
+                created_at__gte=transaction_after
+            ).select_related("customer").filter(
+                Q(customer__complete_name__icontains=customer_name_or_id) |
+                Q(customer__identity_number__icontains=customer_name_or_id))
+
+            transactions_list = m00.pagination(page, 1, transactions)
+
+            html = render_to_string(
+                        template_name="transaction/transactions-table.html", 
+                        context={
+                            "transactions": transactions_list,
+                        }
+                    )
+            data_dict = {"html": html}
+
 
         elif action == "get_my_customers":
             initials = received_json_data['initials']
