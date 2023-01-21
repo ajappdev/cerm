@@ -1,8 +1,0 @@
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=ajbaralae
-POSTGRES_DB=cerm
-PGADMIN_USER=admin@cerm.app
-PGADMIN_PASS=waHGotaozsYtRl9oTSexhTpu7MeD2oP
-SECRET_KEY=django-insecure-c(z52$+ry8k)u-&8^e^y#&ef%=w2xb_$$0pxowvq^g5qsm02yi
-POSTGRES_HOST=localhost
-POSTGRES_PORT=5432
