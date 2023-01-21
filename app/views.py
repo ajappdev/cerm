@@ -19,7 +19,7 @@ from datetime import date, datetime
 from os import path
 from shutil import move
 
-pytesseract.pytesseract.tesseract_cmd = 'C:/Users/user/AppData/Local/Programs/Tesseract-OCR/tesseract.exe'  # your path may be different
+# pytesseract.pytesseract.tesseract_cmd = 'C:/Users/user/AppData/Local/Programs/Tesseract-OCR/tesseract.exe'  # your path may be different
 # pytesseract.pytesseract.tesseract_cmd = 'C:/Program Files/Tesseract-OCR/tesseract.exe'  # your path may be different
 # APP DECLARATIONS
 import app.models as am
