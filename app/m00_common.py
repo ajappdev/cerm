@@ -1,4 +1,4 @@
-from readmrz import MrzDetector, MrzReader
+
 import matplotlib.pyplot as plt
 from datetime import datetime
 
@@ -24,7 +24,6 @@ def process_id_card(file_path):
     plt.show(block=True)
     dark = detector.find_dark_regions(smoothed)
     thresh = detector.apply_threshold(dark)
-    print(type(thresh))
 
 def process_passport(file_path):
     detector = MrzDetector()

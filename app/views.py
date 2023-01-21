@@ -13,7 +13,6 @@ import pandas as pd
 import os
 from django.http import JsonResponse
 import json
-from readmrz import MrzDetector, MrzReader
 import pytesseract
 from datetime import date, datetime
 from os import path
